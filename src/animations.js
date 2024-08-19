@@ -24,6 +24,32 @@ export function createAnimations(scene) {
       frameRate: 10,
       repeat: -1,
     },
+
+    //enemies
+    up_enemy: {
+      texture: "tiles",
+      frames: { start: 8, end: 9 },
+      frameRate: 10,
+      repeat: -1,
+    },
+    left_enemy: {
+      texture: "tiles",
+      frames: { start: 10, end: 11 },
+      frameRate: 10,
+      repeat: -1,
+    },
+    right_enemy: {
+      texture: "tiles",
+      frames: { start: 14, end: 15 },
+      frameRate: 10,
+      repeat: -1,
+    },
+    down_enemy: {
+      texture: "tiles",
+      frames: { start: 12, end: 13 },
+      frameRate: 10,
+      repeat: -1,
+    },
   };
 
   Object.entries(animationsConfig).forEach(([key, config]) => {
