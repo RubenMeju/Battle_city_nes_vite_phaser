@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-
 import { createAnimations } from "../animations.js";
 import { Bloque } from "../objects/Bloque.js";
 import { Player } from "../objects/Player.js";
@@ -13,6 +12,7 @@ export class GameScene extends Phaser.Scene {
     this.maxBombas = 3;
     this.maxEnemies = 3;
   }
+
   preload() {
     this.load.spritesheet("tiles", "assets/sprites1.png", {
       frameWidth: 16,
@@ -22,7 +22,7 @@ export class GameScene extends Phaser.Scene {
     this.load.tilemapTiledJSON("mapa", "/assets/mapa.json");
     this.load.image("tileSets", "assets/sprites1.png");
 
-    //sounds
+    // Sounds
     this.load.audio("explosion", "assets/sounds/explosion.wav");
     this.load.audio("stop", "assets/sounds/stop.wav");
     this.load.audio("walk", "assets/sounds/walk.wav");
@@ -33,6 +33,21 @@ export class GameScene extends Phaser.Scene {
     this.explosionSound = this.sound.add("explosion");
     this.stopSound = this.sound.add("stop");
     this.walkSound = this.sound.add("walk");
+
+    // Crear la parte gris para el HUD
+    const grayPanel = this.add.rectangle(625, 0, 200, 675, 0x808080);
+    grayPanel.setOrigin(0, 0);
+
+    // Mostrar las vidas y enemigos restantes
+    this.livesText = this.add.text(625, 20, "Lives: 3", {
+      fontSize: "20px",
+      fill: "#fff",
+    });
+    this.enemiesText = this.add.text(625, 60, "Enemies: 5", {
+      fontSize: "20px",
+      fill: "#fff",
+    });
+
     // Crear el mapa
     this.mapa = this.make.tilemap({ key: "mapa" });
 
@@ -40,8 +55,6 @@ export class GameScene extends Phaser.Scene {
     this.bloques = new Bloque(this, this.mapa, "tileSets", "solidos", {
       bloques: true,
     });
-
-    // const tileset = this.mapa.addTilesetImage("tileSets");
 
     // Crear un grupo de enemigos
     this.enemies = this.add.group({
@@ -54,9 +67,9 @@ export class GameScene extends Phaser.Scene {
     this.enemies.clear(true, true);
 
     const enemyPositions = [
-      { x: 50, y: 50 },
-      { x: this.scale.width / 2, y: 50 },
-      { x: this.scale.width - 50, y: 50 },
+      { x: 50, y: 0 },
+      { x: this.scale.width / 2, y: 0 },
+      { x: this.scale.width - 200, y: 0 },
     ];
 
     if (this.maxEnemies > 0) {
@@ -90,7 +103,7 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
-    //Colision balas jugador con enemigos
+    // Colisión balas jugador con enemigos
     this.physics.add.collider(
       this.jugador.bullets,
       this.enemies,
@@ -98,6 +111,18 @@ export class GameScene extends Phaser.Scene {
       null,
       this
     );
+
+    // Añadir un área de colisión en el límite derecho
+    this.rightLimit = this.add.rectangle(625, 337.5, 10, 675, 0x000000, 0);
+    this.physics.world.enable(this.rightLimit);
+    this.rightLimit.body.setImmovable(true);
+    this.rightLimit.body.setAllowGravity(false);
+
+    // Añadir colisiones entre el jugador, enemigos y el límite derecho
+    this.physics.add.collider(this.jugador, this.rightLimit);
+    this.enemies.children.iterate((enemy) => {
+      this.physics.add.collider(enemy, this.rightLimit);
+    });
 
     // Configurar los controles
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -141,7 +166,6 @@ export class GameScene extends Phaser.Scene {
       });
       // Elimina el enemigo después de la animación de destrucción
       enemy.once("animationcomplete-destruccion", () => {
-        //  console.log("Animación de destrucción completada");
         enemy.destroy();
       });
     }
