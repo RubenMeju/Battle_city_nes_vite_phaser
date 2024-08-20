@@ -50,7 +50,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Cambio de dirección después de un intervalo de tiempo
     if (time - this.lastMoveTime > this.moveTime) {
       this.setRandomDirection();
-      // this.shoot();
+      this.shoot();
       this.lastMoveTime = time;
     }
 

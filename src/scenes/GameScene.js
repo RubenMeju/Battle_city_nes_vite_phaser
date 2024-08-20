@@ -58,11 +58,17 @@ export class GameScene extends Phaser.Scene {
         const enemy = new Enemy(this, position.x, position.y, "enemy");
         this.enemies.add(enemy); // Añadir al grupo
         this.physics.add.collider(enemy, this.bloques.solidos);
+
+        // Configurar la colisión entre las balas (ENEMIGOS) y los bloques
+        this.physics.add.collider(
+          enemy.bullets,
+          this.bloques.solidos,
+          this.handleBulletBlockCollision,
+          null,
+          this
+        );
       }
     }
-
-    // Configuración de las colisiones entre enemigos y otros objetos
-    this.physics.add.collider(this.enemies, this.bloques.solidos);
 
     // Crear el jugador
     this.jugador = new Player(this, 333, 333, "tiles", 0);
