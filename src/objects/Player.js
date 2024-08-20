@@ -53,11 +53,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.anims.play("right", true);
     } else {
       this.anims.stop();
+      // Reproducir el sonido
+      this.scene.stopSound.play({
+        volume: 0.1,
+        loop: true,
+      });
     }
 
     // Aplica las velocidades calculadas
     this.setVelocityX(velocityX);
     this.setVelocityY(velocityY);
+    // Reproducir el sonido
+    this.scene.walkSound.play({
+      volume: 0.1,
+      loop: false,
+    });
     // Manejo de disparos
     if (
       spaceBar.isDown &&

@@ -21,11 +21,18 @@ export class GameScene extends Phaser.Scene {
 
     this.load.tilemapTiledJSON("mapa", "/assets/mapa.json");
     this.load.image("tileSets", "assets/sprites1.png");
+
+    //sounds
+    this.load.audio("explosion", "assets/sounds/explosion.wav");
+    this.load.audio("stop", "assets/sounds/stop.wav");
+    this.load.audio("walk", "assets/sounds/walk.wav");
   }
 
   create() {
     createAnimations(this);
-
+    this.explosionSound = this.sound.add("explosion");
+    this.stopSound = this.sound.add("stop");
+    this.walkSound = this.sound.add("walk");
     // Crear el mapa
     this.mapa = this.make.tilemap({ key: "mapa" });
 
@@ -127,7 +134,11 @@ export class GameScene extends Phaser.Scene {
       bullet.destroy();
 
       enemy.anims.play("destruccion", true);
-
+      // Reproducir el sonido
+      this.explosionSound.play({
+        volume: 0.5,
+        loop: false,
+      });
       // Elimina el enemigo después de la animación de destrucción
       enemy.once("animationcomplete-destruccion", () => {
         //  console.log("Animación de destrucción completada");
