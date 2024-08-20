@@ -73,6 +73,15 @@ export class GameScene extends Phaser.Scene {
     // Configuración de las colisiones entre enemigos y otros objetos
     this.physics.add.collider(this.enemies, this.bloques.solidos);
 
+    //Colision balas jugador con enemigos
+    this.physics.add.collider(
+      this.jugador.bullets,
+      this.enemies,
+      this.balaJugadorImpactaEnElEnemigo,
+      null,
+      this
+    );
+
     // Configurar los controles
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spaceBar = this.input.keyboard.addKey(
@@ -94,5 +103,28 @@ export class GameScene extends Phaser.Scene {
   handleBulletBlockCollision(bullet, tile) {
     bullet.destroy(); // Destruye la bala al colisionar con el bloque
     this.bloques.destroyBlock(tile, bullet.direction); // Pasa la dirección del disparo
+  }
+
+  balaJugadorImpactaEnElEnemigo(enemy, bullet) {
+    // Reproduce la animación de destrucción del enemigo
+    if (enemy) {
+      console.log(enemy);
+      enemy.alive = false;
+      enemy.setVelocity(0, 0);
+      // Desactiva y elimina la bala
+      bullet.setActive(false);
+      bullet.setVisible(false);
+      bullet.destroy();
+
+      enemy.anims.pause();
+      enemy.anims.play("destruccion", true);
+
+      // Elimina el enemigo después de la animación de destrucción
+      enemy.once("animationcomplete-destruccion", () => {
+        console.log("Animación de destrucción completada");
+
+        enemy.destroy();
+      });
+    }
   }
 }

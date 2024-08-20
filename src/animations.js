@@ -50,6 +50,13 @@ export function createAnimations(scene) {
       frameRate: 10,
       repeat: -1,
     },
+    //destruccion
+    destruccion: {
+      texture: "tiles",
+      frames: { start: 216, end: 218 },
+      frameRate: 4,
+      repeat: 0,
+    },
   };
 
   Object.entries(animationsConfig).forEach(([key, config]) => {

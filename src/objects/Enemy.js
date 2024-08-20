@@ -26,7 +26,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.maxBullets = 3; // Número máximo de balas simultáneas
+    this.maxBullets = 1; // Número máximo de balas simultáneas
     this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
     this.lastShot = 0; // Tiempo del último disparo
 
@@ -41,9 +41,16 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time) {
+    if (this.alive) {
+      this.movement(time);
+    }
+  }
+
+  movement(time) {
     // Cambio de dirección después de un intervalo de tiempo
     if (time - this.lastMoveTime > this.moveTime) {
       this.setRandomDirection();
+      // this.shoot();
       this.lastMoveTime = time;
     }
 
@@ -81,7 +88,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.setRandomDirection();
     }
   }
-
   shoot() {
     if (this.bullets.getChildren().length < this.maxBullets) {
       const bullet = this.bullets.get(this.x, this.y);
@@ -89,5 +95,9 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
         bullet.fire(this.x, this.y, this.lastDirection);
       }
     }
+  }
+
+  destruir() {
+    console.log("destruir al enemigo");
   }
 }
