@@ -3,6 +3,7 @@ import { createAnimations } from "../animations.js";
 import { Bloque } from "../objects/Bloque.js";
 import { Player } from "../objects/Player.js";
 import { Enemy } from "../objects/Enemy.js";
+import { Hub } from "../objects/Hub.js"; // Importa la nueva clase Hub
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -11,6 +12,8 @@ export class GameScene extends Phaser.Scene {
     this.escalado = 3;
     this.maxBombas = 3;
     this.maxEnemies = 3;
+    this.totalEnemies = 20;
+    this.lives = 5;
   }
 
   preload() {
@@ -34,19 +37,8 @@ export class GameScene extends Phaser.Scene {
     this.stopSound = this.sound.add("stop");
     this.walkSound = this.sound.add("walk");
 
-    // Crear la parte gris para el HUD
-    const grayPanel = this.add.rectangle(625, 0, 200, 675, 0x808080);
-    grayPanel.setOrigin(0, 0);
-
-    // Mostrar las vidas y enemigos restantes
-    this.livesText = this.add.text(625, 20, "Lives: 3", {
-      fontSize: "20px",
-      fill: "#fff",
-    });
-    this.enemiesText = this.add.text(625, 60, "Enemies: 5", {
-      fontSize: "20px",
-      fill: "#fff",
-    });
+    // Crear el HUD
+    this.hub = new Hub(this);
 
     // Crear el mapa
     this.mapa = this.make.tilemap({ key: "mapa" });
@@ -140,6 +132,10 @@ export class GameScene extends Phaser.Scene {
         enemy.update(time, delta);
       }
     });
+
+    // Ejemplo de actualización del HUD (puedes personalizar esto según sea necesario)
+    this.hub.updateLives(this.lives);
+    this.hub.updateEnemies(this.totalEnemies);
   }
 
   handleBulletBlockCollision(bullet, tile) {
@@ -167,6 +163,7 @@ export class GameScene extends Phaser.Scene {
       // Elimina el enemigo después de la animación de destrucción
       enemy.once("animationcomplete-destruccion", () => {
         enemy.destroy();
+        this.totalEnemies--;
       });
     }
   }
