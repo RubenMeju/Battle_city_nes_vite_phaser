@@ -5,6 +5,17 @@ import { Player } from "../objects/Player.js";
 import { Enemy } from "../objects/Enemy.js";
 import { Hub } from "../objects/Hub.js";
 
+import {
+  INITIAL_ENEMIES,
+  ENEMY_SPAWN_DELAY,
+  TILE_SIZE,
+  RIGHT_LIMIT_X,
+  RIGHT_LIMIT_Y,
+  RIGHT_LIMIT_WIDTH,
+  RIGHT_LIMIT_HEIGHT,
+  EXPLOSION_VOLUME,
+} from "../config.js";
+
 export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene" });
@@ -19,8 +30,8 @@ export class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.spritesheet("tiles", "assets/sprites1.png", {
-      frameWidth: 16,
-      frameHeight: 16,
+      frameWidth: TILE_SIZE,
+      frameHeight: TILE_SIZE,
     });
 
     this.load.tilemapTiledJSON("mapa", "/assets/mapa.json");
@@ -33,46 +44,60 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.initSounds();
     createAnimations(this);
+
+    this.createHud();
+    this.createMap();
+    this.createBlocks();
+    this.createEnemies();
+    this.createPlayer();
+    this.createRightLimit();
+    this.setupControls();
+
+    this.enemyTimer = this.time.addEvent({
+      delay: ENEMY_SPAWN_DELAY,
+      callback: this.checkNextWave,
+      callbackScope: this,
+      loop: true,
+    });
+  }
+
+  initSounds() {
     this.explosionSound = this.sound.add("explosion");
     this.stopSound = this.sound.add("stop");
     this.walkSound = this.sound.add("walk");
+  }
 
-    // Crear el HUD
+  createHud() {
     this.hub = new Hub(this);
+  }
 
-    // Crear el mapa
+  createMap() {
     this.mapa = this.make.tilemap({ key: "mapa" });
+  }
 
-    // Instanciar la clase Bloque
+  createBlocks() {
     this.bloques = new Bloque(this, this.mapa, "tileSets", "solidos", {
       bloques: true,
     });
+  }
 
-    // Crear un grupo de enemigos
+  createEnemies() {
     this.enemies = this.add.group({
       classType: Enemy,
       maxSize: this.totalEnemies,
       runChildUpdate: true,
     });
     this.enemies.clear(true, true);
+    this.generateEnemies(INITIAL_ENEMIES);
+  }
 
-    // Generar los primeros 3 enemigos
-    this.generateEnemies(3);
-
-    // Configurar un temporizador para generar nuevos enemigos cada 15 segundos
-    this.enemyTimer = this.time.addEvent({
-      delay: 15000,
-      callback: this.checkNextWave,
-      callbackScope: this,
-      loop: true,
-    });
-
-    // Crear el jugador
+  createPlayer() {
     this.jugador = new Player(this, 333, 333, "tiles", 0);
     this.physics.add.collider(this.jugador, this.bloques.solidos);
 
-    // Configurar la colisión entre las balas y los bloques
+    // Configurar colisiones
     this.physics.add.collider(
       this.jugador.bullets,
       this.bloques.solidos,
@@ -80,8 +105,6 @@ export class GameScene extends Phaser.Scene {
       null,
       this
     );
-
-    // Colisión balas jugador con enemigos
     this.physics.add.collider(
       this.jugador.bullets,
       this.enemies,
@@ -89,20 +112,28 @@ export class GameScene extends Phaser.Scene {
       null,
       this
     );
+  }
 
-    // Añadir un área de colisión en el límite derecho
-    this.rightLimit = this.add.rectangle(625, 337.5, 10, 675, 0x000000, 0);
+  createRightLimit() {
+    this.rightLimit = this.add.rectangle(
+      RIGHT_LIMIT_X,
+      RIGHT_LIMIT_Y,
+      RIGHT_LIMIT_WIDTH,
+      RIGHT_LIMIT_HEIGHT,
+      0x000000,
+      0
+    );
     this.physics.world.enable(this.rightLimit);
     this.rightLimit.body.setImmovable(true);
     this.rightLimit.body.setAllowGravity(false);
 
-    // Añadir colisiones entre el jugador, enemigos y el límite derecho
     this.physics.add.collider(this.jugador, this.rightLimit);
     this.enemies.children.iterate((enemy) => {
       this.physics.add.collider(enemy, this.rightLimit);
     });
+  }
 
-    // Configurar los controles
+  setupControls() {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spaceBar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -111,19 +142,17 @@ export class GameScene extends Phaser.Scene {
 
   update(time, delta) {
     if (this.lives <= 0) {
-      this.scene.start("GameOverScene"); // Cambia a la escena de Game Over
+      this.scene.start("GameOverScene");
     }
 
     this.jugador.update(this.cursors, this.spaceBar);
 
-    // Actualiza la lógica de todos los enemigos
     this.enemies.children.iterate((enemy) => {
       if (enemy && enemy.active) {
         enemy.update(time, delta);
       }
     });
 
-    // Actualización del HUD
     this.hub.updateLives(this.lives);
     this.hub.updateEnemies(
       this.totalEnemies - this.enemiesCreated + this.enemiesRemaining
@@ -147,7 +176,6 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.collider(enemy, this.bloques.solidos);
       this.physics.add.collider(enemy, this.rightLimit);
 
-      // Configurar la colisión entre las balas (ENEMIGOS) y los bloques
       this.physics.add.collider(
         enemy.bullets,
         this.bloques.solidos,
@@ -166,13 +194,13 @@ export class GameScene extends Phaser.Scene {
       this.enemiesRemaining === 0 &&
       this.enemiesCreated < this.totalEnemies
     ) {
-      this.generateEnemies(3);
+      this.generateEnemies(INITIAL_ENEMIES);
     }
   }
 
   handleBulletBlockCollision(bullet, tile) {
-    bullet.destroy(); // Destruye la bala al colisionar con el bloque
-    this.bloques.destroyBlock(tile, bullet.direction); // Pasa la dirección del disparo
+    bullet.destroy();
+    this.bloques.destroyBlock(tile, bullet.direction);
   }
 
   balaJugadorImpactaEnElEnemigo(enemy, bullet) {
@@ -184,7 +212,7 @@ export class GameScene extends Phaser.Scene {
       bullet.destroy();
 
       enemy.anims.play("destruccion", true);
-      this.explosionSound.play({ volume: 0.5, loop: false });
+      this.explosionSound.play({ volume: EXPLOSION_VOLUME, loop: false });
 
       enemy.once("animationcomplete-destruccion", () => {
         enemy.destroy();
