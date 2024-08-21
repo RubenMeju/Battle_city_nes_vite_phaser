@@ -50,6 +50,13 @@ export function createAnimations(scene) {
       frameRate: 10,
       repeat: -1,
     },
+    //aparecer
+    aparecer: {
+      texture: "tiles",
+      frames: { start: 166, end: 169 },
+      frameRate: 6,
+      repeat: -1,
+    },
     //destruccion
     destruccion: {
       texture: "tiles",

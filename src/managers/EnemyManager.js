@@ -27,6 +27,16 @@ export class EnemyManager {
     for (let i = 0; i < enemiesToCreate; i++) {
       const position = enemyPositions[i % enemyPositions.length];
       const enemy = new Enemy(this.scene, position.x, position.y, "enemy");
+
+      // Configuración inicial
+      enemy.play("aparecer"); // Reproduce la animación de aparición
+      this.scene.time.delayedCall(1500, () => {
+        if (enemy.active) {
+          enemy.play("down_enemy"); // Cambia a la animación normal después de 3 segundos
+        }
+      });
+
+      // Agregar colisiones
       this.enemies.add(enemy);
       this.scene.physics.add.collider(enemy, this.scene.bloques.solidos);
       this.scene.physics.add.collider(enemy, this.scene.rightLimit);

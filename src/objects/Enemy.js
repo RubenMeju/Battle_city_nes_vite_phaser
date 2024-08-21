@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-
 import { Bullet } from "./Bullet.js";
 
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
@@ -15,11 +14,14 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.setCollideWorldBounds(true);
 
+    // Configuración inicial
     this.velocidad = 100;
     this.alive = true;
     this.direction = "right"; // Dirección inicial
     this.moveTime = 2000; // Tiempo en milisegundos antes de cambiar de dirección
     this.lastMoveTime = 0; // Tiempo del último cambio de dirección
+    this.appearTime = 1500; // Tiempo en milisegundos para la animación de aparición
+    this.isMoving = false; // Controla si el enemigo está en movimiento
 
     // Configuración de las balas
     this.bullets = this.scene.physics.add.group({
@@ -32,6 +34,16 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     // Inicializa la dirección aleatoriamente
     this.setRandomDirection();
+
+    // Inicializa la animación de aparición
+    this.play("aparecer");
+    this.scene.time.delayedCall(this.appearTime, () => {
+      if (this.active) {
+        this.play("down_enemy"); // Cambia a la animación normal después de la animación de aparición
+        this.isMoving = true; // Permite el movimiento después de la animación
+        this.lastMoveTime = this.scene.time.now; // Inicializa el tiempo de movimiento después de la animación
+      }
+    });
   }
 
   setRandomDirection() {
@@ -41,20 +53,23 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time) {
-    if (this.alive) {
+    if (this.alive && this.isMoving) {
       this.movement(time);
     }
   }
 
   movement(time) {
-    // Cambio de dirección después de un intervalo de tiempo
-    if (time - this.lastMoveTime > this.moveTime) {
+    // Cambio de dirección después de un intervalo de tiempo o al colisionar
+    if (time - this.lastMoveTime > this.moveTime || this.isColliding()) {
       this.setRandomDirection();
-      this.shoot();
       this.lastMoveTime = time;
     }
 
     // Mover al enemigo en la dirección actual
+    this.updateMovement();
+  }
+
+  updateMovement() {
     switch (this.direction) {
       case "up":
         this.setVelocityY(-this.velocidad);
@@ -77,17 +92,17 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.anims.play("right_enemy", true);
         break;
     }
+  }
 
-    // Detecta colisiones y cambia de dirección si es necesario
-    if (
+  isColliding() {
+    return (
       this.body.blocked.left ||
       this.body.blocked.right ||
       this.body.blocked.up ||
       this.body.blocked.down
-    ) {
-      this.setRandomDirection();
-    }
+    );
   }
+
   shoot() {
     if (this.bullets.getChildren().length < this.maxBullets) {
       const bullet = this.bullets.get(this.x, this.y);
@@ -95,9 +110,5 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
         bullet.fire(this.x, this.y, this.lastDirection);
       }
     }
-  }
-
-  destruir() {
-    console.log("destruir al enemigo");
   }
 }
