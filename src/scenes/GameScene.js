@@ -1,19 +1,17 @@
 import Phaser from "phaser";
 import { createAnimations } from "../animations.js";
 import { Bloque } from "../objects/Bloque.js";
-import { Player } from "../objects/Player.js";
-import { Enemy } from "../objects/Enemy.js";
-import { Hub } from "../objects/Hub.js";
-
+import { PlayerManager } from "../managers/PlayerManager.js";
+import { EnemyManager } from "../managers/EnemyManager.js";
+import { HudManager } from "../managers/HubManager.js";
+import { SoundManager } from "../managers/SoundManager.js";
 import {
-  INITIAL_ENEMIES,
   ENEMY_SPAWN_DELAY,
   TILE_SIZE,
   RIGHT_LIMIT_X,
   RIGHT_LIMIT_Y,
   RIGHT_LIMIT_WIDTH,
   RIGHT_LIMIT_HEIGHT,
-  EXPLOSION_VOLUME,
 } from "../config.js";
 
 export class GameScene extends Phaser.Scene {
@@ -24,8 +22,6 @@ export class GameScene extends Phaser.Scene {
     this.maxBombas = 3;
     this.totalEnemies = 9;
     this.lives = 1;
-    this.enemiesCreated = 0;
-    this.enemiesRemaining = 0;
   }
 
   preload() {
@@ -44,33 +40,26 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.initSounds();
+    this.soundManager = new SoundManager(this);
     createAnimations(this);
 
-    this.createHud();
+    this.hudManager = new HudManager(this);
     this.createMap();
     this.createBlocks();
-    this.createEnemies();
-    this.createPlayer();
+    this.enemyManager = new EnemyManager(this);
+
+    this.enemies = this.enemyManager.enemies;
+
+    this.playerManager = new PlayerManager(this);
     this.createRightLimit();
     this.setupControls();
 
     this.enemyTimer = this.time.addEvent({
       delay: ENEMY_SPAWN_DELAY,
-      callback: this.checkNextWave,
-      callbackScope: this,
+      callback: this.enemyManager.checkNextWave,
+      callbackScope: this.enemyManager,
       loop: true,
     });
-  }
-
-  initSounds() {
-    this.explosionSound = this.sound.add("explosion");
-    this.stopSound = this.sound.add("stop");
-    this.walkSound = this.sound.add("walk");
-  }
-
-  createHud() {
-    this.hub = new Hub(this);
   }
 
   createMap() {
@@ -81,37 +70,6 @@ export class GameScene extends Phaser.Scene {
     this.bloques = new Bloque(this, this.mapa, "tileSets", "solidos", {
       bloques: true,
     });
-  }
-
-  createEnemies() {
-    this.enemies = this.add.group({
-      classType: Enemy,
-      maxSize: this.totalEnemies,
-      runChildUpdate: true,
-    });
-    this.enemies.clear(true, true);
-    this.generateEnemies(INITIAL_ENEMIES);
-  }
-
-  createPlayer() {
-    this.jugador = new Player(this, 333, 333, "tiles", 0);
-    this.physics.add.collider(this.jugador, this.bloques.solidos);
-
-    // Configurar colisiones
-    this.physics.add.collider(
-      this.jugador.bullets,
-      this.bloques.solidos,
-      this.handleBulletBlockCollision,
-      null,
-      this
-    );
-    this.physics.add.collider(
-      this.jugador.bullets,
-      this.enemies,
-      this.balaJugadorImpactaEnElEnemigo,
-      null,
-      this
-    );
   }
 
   createRightLimit() {
@@ -127,8 +85,8 @@ export class GameScene extends Phaser.Scene {
     this.rightLimit.body.setImmovable(true);
     this.rightLimit.body.setAllowGravity(false);
 
-    this.physics.add.collider(this.jugador, this.rightLimit);
-    this.enemies.children.iterate((enemy) => {
+    this.physics.add.collider(this.playerManager.player, this.rightLimit);
+    this.enemyManager.enemies.children.iterate((enemy) => {
       this.physics.add.collider(enemy, this.rightLimit);
     });
   }
@@ -145,57 +103,14 @@ export class GameScene extends Phaser.Scene {
       this.scene.start("GameOverScene");
     }
 
-    this.jugador.update(this.cursors, this.spaceBar);
-
-    this.enemies.children.iterate((enemy) => {
-      if (enemy && enemy.active) {
-        enemy.update(time, delta);
-      }
-    });
-
-    this.hub.updateLives(this.lives);
-    this.hub.updateEnemies(
-      this.totalEnemies - this.enemiesCreated + this.enemiesRemaining
+    this.playerManager.update(this.cursors, this.spaceBar);
+    this.enemyManager.update(time, delta);
+    this.hudManager.updateLives(this.lives);
+    this.hudManager.updateEnemies(
+      this.totalEnemies -
+        this.enemyManager.enemiesCreated +
+        this.enemyManager.enemiesRemaining
     );
-  }
-
-  generateEnemies(num) {
-    const enemyPositions = [
-      { x: 50, y: 0 },
-      { x: this.scale.width / 2, y: 0 },
-      { x: this.scale.width - 200, y: 0 },
-    ];
-
-    const remainingEnemiesToCreate = this.totalEnemies - this.enemiesCreated;
-    const enemiesToCreate = Math.min(num, remainingEnemiesToCreate);
-
-    for (let i = 0; i < enemiesToCreate; i++) {
-      const position = enemyPositions[i % enemyPositions.length];
-      const enemy = new Enemy(this, position.x, position.y, "enemy");
-      this.enemies.add(enemy);
-      this.physics.add.collider(enemy, this.bloques.solidos);
-      this.physics.add.collider(enemy, this.rightLimit);
-
-      this.physics.add.collider(
-        enemy.bullets,
-        this.bloques.solidos,
-        this.handleBulletBlockCollision,
-        null,
-        this
-      );
-
-      this.enemiesCreated++;
-      this.enemiesRemaining++;
-    }
-  }
-
-  checkNextWave() {
-    if (
-      this.enemiesRemaining === 0 &&
-      this.enemiesCreated < this.totalEnemies
-    ) {
-      this.generateEnemies(INITIAL_ENEMIES);
-    }
   }
 
   handleBulletBlockCollision(bullet, tile) {
@@ -204,21 +119,19 @@ export class GameScene extends Phaser.Scene {
   }
 
   balaJugadorImpactaEnElEnemigo(enemy, bullet) {
-    if (enemy) {
+    if (enemy && bullet) {
       enemy.alive = false;
-      enemy.setVelocity(0, 0);
-      bullet.setActive(false);
-      bullet.setVisible(false);
       bullet.destroy();
 
+      enemy.setVelocity(0);
       enemy.anims.play("destruccion", true);
-      this.explosionSound.play({ volume: EXPLOSION_VOLUME, loop: false });
+      this.soundManager.playExplosion();
 
       enemy.once("animationcomplete-destruccion", () => {
         enemy.destroy();
-        this.enemiesRemaining--;
-        if (this.enemiesRemaining === 0) {
-          this.checkNextWave();
+        this.enemyManager.enemiesRemaining--;
+        if (this.enemyManager.enemiesRemaining === 0) {
+          this.enemyManager.checkNextWave();
         }
       });
     }

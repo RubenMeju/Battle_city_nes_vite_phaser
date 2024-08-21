@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-
 import { Bullet } from "./Bullet.js";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -17,7 +16,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.alive = true;
 
     // Dirección en la que se encuentra el jugador
-    this.lastDirection = "up "; // Dirección por defecto
+    this.lastDirection = "up";
 
     // Configuración de las balas
     this.bullets = this.scene.physics.add.group({
@@ -54,20 +53,26 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.anims.stop();
       // Reproducir el sonido
-      this.scene.stopSound.play({
-        volume: 0.1,
-        loop: true,
-      });
+      if (this.scene.stopSound) {
+        this.scene.stopSound.play({
+          volume: 0.1,
+          loop: true,
+        });
+      }
     }
 
     // Aplica las velocidades calculadas
     this.setVelocityX(velocityX);
     this.setVelocityY(velocityY);
-    // Reproducir el sonido
-    this.scene.walkSound.play({
-      volume: 0.1,
-      loop: false,
-    });
+
+    // Reproducir el sonido de caminar
+    if ((velocityX !== 0 || velocityY !== 0) && this.scene.walkSound) {
+      this.scene.walkSound.play({
+        volume: 0.1,
+        loop: false,
+      });
+    }
+
     // Manejo de disparos
     if (
       spaceBar.isDown &&
