@@ -12,7 +12,7 @@ export class GameScene extends Phaser.Scene {
     this.escalado = 3;
     this.maxBombas = 3;
     this.totalEnemies = 9;
-    this.lives = 5;
+    this.lives = 1;
     this.enemiesCreated = 0;
     this.enemiesRemaining = 0;
   }
@@ -110,6 +110,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
+    if (this.lives <= 0) {
+      this.scene.start("GameOverScene"); // Cambia a la escena de Game Over
+    }
+
     this.jugador.update(this.cursors, this.spaceBar);
 
     // Actualiza la lógica de todos los enemigos
