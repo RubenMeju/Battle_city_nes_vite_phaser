@@ -2,10 +2,9 @@ export class Hub {
   constructor(scene) {
     this.scene = scene;
     this.totalEnemies = this.scene.totalEnemies;
-    this.enemyImages = []; // Array para almacenar las imágenes de los enemigos
 
     this.createHud(); // Crear el HUD al inicio
-    this.createEnemies(); // Crear los enemigos al inicio
+    this.createEnemies(this.totalEnemies); // Crear los enemigos al inicio
   }
 
   createHud() {
@@ -25,38 +24,28 @@ export class Hub {
     );
   }
 
-  createEnemies() {
-    const { x, y, width, height } = this.getEnemyCropData(); // Obtener datos de recorte
+  createEnemies(enemyCount) {
+    const { x, y, width, height } = this.getEnemyCropData();
     const { startX, startY, xOffset, yOffset, enemiesPerColumn } =
-      this.getEnemyGridData(); // Obtener datos de la cuadrícula
+      this.getEnemyGridData(enemyCount);
 
-    // Crear o actualizar las imágenes de los enemigos
-    for (let i = 0; i < this.totalEnemies; i++) {
-      if (i < this.enemyImages.length) {
-        // Si ya existe una imagen para este enemigo, simplemente actualiza su posición
-        const enemyImage = this.enemyImages[i];
-        const posX = startX + Math.floor(i / enemiesPerColumn) * xOffset;
-        const posY = startY + (i % enemiesPerColumn) * yOffset;
-
-        enemyImage.setPosition(posX, posY);
-      } else {
-        // Si no existe una imagen para este enemigo, créala
-        const posX = startX + Math.floor(i / enemiesPerColumn) * xOffset;
-        const posY = startY + (i % enemiesPerColumn) * yOffset;
-
-        const croppedImage = this.scene.add
-          .image(posX, posY, "tileSets")
-          .setCrop(x, y, width, height)
-          .setScale(2.5);
-
-        this.enemyImages.push(croppedImage); // Almacena la imagen
-      }
+    // Eliminar cualquier imagen de enemigos anterior
+    if (this.enemyImages) {
+      this.enemyImages.forEach((image) => image.destroy());
     }
 
-    // Eliminar imágenes si hay más imágenes que enemigos
-    while (this.enemyImages.length > this.totalEnemies) {
-      const imageToRemove = this.enemyImages.pop();
-      imageToRemove.destroy();
+    this.enemyImages = []; // Reiniciar el array de imágenes
+
+    for (let i = 0; i < enemyCount; i++) {
+      const posX = startX + Math.floor(i / enemiesPerColumn) * xOffset;
+      const posY = startY + (i % enemiesPerColumn) * yOffset;
+
+      const croppedImage = this.scene.add
+        .image(posX, posY, "tileSets")
+        .setCrop(x, y, width, height)
+        .setScale(2.5);
+
+      this.enemyImages.push(croppedImage); // Almacenar la imagen
     }
   }
 
@@ -69,8 +58,8 @@ export class Hub {
     };
   }
 
-  getEnemyGridData() {
-    const enemiesPerColumn = Math.ceil(this.totalEnemies / 2);
+  getEnemyGridData(enemyCount) {
+    const enemiesPerColumn = Math.ceil(enemyCount / 2);
     return {
       startX: 360,
       startY: 0,
@@ -86,7 +75,7 @@ export class Hub {
   }
 
   updateEnemies(totalEnemies) {
-    this.totalEnemies = totalEnemies; // Actualiza el total de enemigos
-    this.createEnemies(); // Actualiza las imágenes de los enemigos
+    this.totalEnemies = totalEnemies;
+    this.createEnemies(this.totalEnemies); // Actualizar las imágenes de los enemigos
   }
 }

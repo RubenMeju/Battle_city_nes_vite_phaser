@@ -3,7 +3,7 @@ import { createAnimations } from "../animations.js";
 import { Bloque } from "../objects/Bloque.js";
 import { Player } from "../objects/Player.js";
 import { Enemy } from "../objects/Enemy.js";
-import { Hub } from "../objects/Hub.js"; // Importa la nueva clase Hub
+import { Hub } from "../objects/Hub.js";
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -11,9 +11,10 @@ export class GameScene extends Phaser.Scene {
 
     this.escalado = 3;
     this.maxBombas = 3;
-    this.maxEnemies = 3;
-    this.totalEnemies = 20;
+    this.totalEnemies = 9;
     this.lives = 5;
+    this.enemiesCreated = 0;
+    this.enemiesRemaining = 0;
   }
 
   preload() {
@@ -51,36 +52,21 @@ export class GameScene extends Phaser.Scene {
     // Crear un grupo de enemigos
     this.enemies = this.add.group({
       classType: Enemy,
-      key: "enemy",
-      max: this.maxEnemies,
+      maxSize: this.totalEnemies,
       runChildUpdate: true,
     });
-    // Eliminar los enemigos
     this.enemies.clear(true, true);
 
-    const enemyPositions = [
-      { x: 50, y: 0 },
-      { x: this.scale.width / 2, y: 0 },
-      { x: this.scale.width - 200, y: 0 },
-    ];
+    // Generar los primeros 3 enemigos
+    this.generateEnemies(3);
 
-    if (this.maxEnemies > 0) {
-      for (let i = 0; i < this.maxEnemies; i++) {
-        const position = enemyPositions[i]; // Posición específica
-        const enemy = new Enemy(this, position.x, position.y, "enemy");
-        this.enemies.add(enemy); // Añadir al grupo
-        this.physics.add.collider(enemy, this.bloques.solidos);
-
-        // Configurar la colisión entre las balas (ENEMIGOS) y los bloques
-        this.physics.add.collider(
-          enemy.bullets,
-          this.bloques.solidos,
-          this.handleBulletBlockCollision,
-          null,
-          this
-        );
-      }
-    }
+    // Configurar un temporizador para generar nuevos enemigos cada 15 segundos
+    this.enemyTimer = this.time.addEvent({
+      delay: 15000,
+      callback: this.checkNextWave,
+      callbackScope: this,
+      loop: true,
+    });
 
     // Crear el jugador
     this.jugador = new Player(this, 333, 333, "tiles", 0);
@@ -133,9 +119,51 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    // Ejemplo de actualización del HUD (puedes personalizar esto según sea necesario)
+    // Actualización del HUD
     this.hub.updateLives(this.lives);
-    this.hub.updateEnemies(this.totalEnemies);
+    this.hub.updateEnemies(
+      this.totalEnemies - this.enemiesCreated + this.enemiesRemaining
+    );
+  }
+
+  generateEnemies(num) {
+    const enemyPositions = [
+      { x: 50, y: 0 },
+      { x: this.scale.width / 2, y: 0 },
+      { x: this.scale.width - 200, y: 0 },
+    ];
+
+    const remainingEnemiesToCreate = this.totalEnemies - this.enemiesCreated;
+    const enemiesToCreate = Math.min(num, remainingEnemiesToCreate);
+
+    for (let i = 0; i < enemiesToCreate; i++) {
+      const position = enemyPositions[i % enemyPositions.length];
+      const enemy = new Enemy(this, position.x, position.y, "enemy");
+      this.enemies.add(enemy);
+      this.physics.add.collider(enemy, this.bloques.solidos);
+      this.physics.add.collider(enemy, this.rightLimit);
+
+      // Configurar la colisión entre las balas (ENEMIGOS) y los bloques
+      this.physics.add.collider(
+        enemy.bullets,
+        this.bloques.solidos,
+        this.handleBulletBlockCollision,
+        null,
+        this
+      );
+
+      this.enemiesCreated++;
+      this.enemiesRemaining++;
+    }
+  }
+
+  checkNextWave() {
+    if (
+      this.enemiesRemaining === 0 &&
+      this.enemiesCreated < this.totalEnemies
+    ) {
+      this.generateEnemies(3);
+    }
   }
 
   handleBulletBlockCollision(bullet, tile) {
@@ -144,26 +172,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   balaJugadorImpactaEnElEnemigo(enemy, bullet) {
-    // Reproduce la animación de destrucción del enemigo
     if (enemy) {
-      console.log(enemy);
       enemy.alive = false;
       enemy.setVelocity(0, 0);
-      // Desactiva y elimina la bala
       bullet.setActive(false);
       bullet.setVisible(false);
       bullet.destroy();
 
       enemy.anims.play("destruccion", true);
-      // Reproducir el sonido
-      this.explosionSound.play({
-        volume: 0.5,
-        loop: false,
-      });
-      // Elimina el enemigo después de la animación de destrucción
+      this.explosionSound.play({ volume: 0.5, loop: false });
+
       enemy.once("animationcomplete-destruccion", () => {
         enemy.destroy();
-        this.totalEnemies--;
+        this.enemiesRemaining--;
+        if (this.enemiesRemaining === 0) {
+          this.checkNextWave();
+        }
       });
     }
   }
