@@ -130,6 +130,7 @@ export class GameScene extends Phaser.Scene {
       this.soundManager.playExplosion();
 
       enemy.once("animationcomplete-destruccion", () => {
+        console.log("animation complete mejuuuuuuu");
         enemy.destroy();
         this.enemyManager.enemiesRemaining--;
         if (this.enemyManager.enemiesRemaining === 0) {
@@ -149,12 +150,13 @@ export class GameScene extends Phaser.Scene {
       bullet.destroy();
 
       player.setVelocity(0);
-      player.setActive(false);
       this.soundManager.playExplosion();
       player.anims.play("destruccion", true);
 
       player.once("animationcomplete-destruccion", () => {
         console.log("animacion completada");
+        player.setActive(false);
+
         player.destroy();
       });
     }
