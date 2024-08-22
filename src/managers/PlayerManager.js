@@ -25,9 +25,21 @@ export class PlayerManager {
       null,
       this.scene
     );
+
+    this.scene.physics.add.collider(
+      this.player,
+      this.scene.enemyManager.enemies.children
+        .getArray()
+        .flatMap((enemy) => enemy.bullets),
+      this.scene.balaEnemigoImpactaEnElJugador,
+      null,
+      this.scene
+    );
   }
 
   update(cursors, spaceBar) {
-    this.player.update(cursors, spaceBar);
+    if (this.player.alive) {
+      this.player.update(cursors, spaceBar);
+    }
   }
 }

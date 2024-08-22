@@ -63,6 +63,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (time - this.lastMoveTime > this.moveTime || this.isColliding()) {
       this.setRandomDirection();
       this.lastMoveTime = time;
+      this.shoot();
     }
 
     // Mover al enemigo en la dirección actual

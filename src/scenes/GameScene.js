@@ -21,7 +21,7 @@ export class GameScene extends Phaser.Scene {
     this.escalado = 3;
     this.maxBombas = 3;
     this.totalEnemies = 9;
-    this.lives = 1;
+    this.lives = 3;
   }
 
   preload() {
@@ -103,7 +103,9 @@ export class GameScene extends Phaser.Scene {
       this.scene.start("GameOverScene");
     }
 
-    this.playerManager.update(this.cursors, this.spaceBar);
+    if (this.playerManager.player.alive) {
+      this.playerManager.update(this.cursors, this.spaceBar);
+    }
     this.enemyManager.update(time, delta);
     this.hudManager.updateLives(this.lives);
     this.hudManager.updateEnemies(
@@ -133,6 +135,27 @@ export class GameScene extends Phaser.Scene {
         if (this.enemyManager.enemiesRemaining === 0) {
           this.enemyManager.checkNextWave();
         }
+      });
+    }
+  }
+
+  balaEnemigoImpactaEnElJugador(player, bullet) {
+    console.log("Probando player: ", player);
+    // console.log("Probando bullet: ", bullet);
+    if (player && bullet) {
+      player.alive = false;
+      this.lives--;
+
+      bullet.destroy();
+
+      player.setVelocity(0);
+      player.setActive(false);
+      this.soundManager.playExplosion();
+      player.anims.play("destruccion", true);
+
+      player.once("animationcomplete-destruccion", () => {
+        console.log("animacion completada");
+        player.destroy();
       });
     }
   }
