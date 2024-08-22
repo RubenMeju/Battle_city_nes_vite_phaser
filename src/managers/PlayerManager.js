@@ -7,7 +7,7 @@ export class PlayerManager {
   }
 
   createPlayer() {
-    this.player = new Player(this.scene, 333, 333, "tiles", 0);
+    this.player = new Player(this.scene, 220, 650, "tiles", 0);
     this.scene.physics.add.collider(this.player, this.scene.bloques.solidos);
 
     // Configurar colisiones
