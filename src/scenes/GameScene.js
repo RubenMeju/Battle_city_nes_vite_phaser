@@ -144,7 +144,6 @@ export class GameScene extends Phaser.Scene {
     console.log("Probando player: ", player);
     if (player && bullet) {
       player.alive = false;
-      //this.lives--;
 
       bullet.destroy();
 

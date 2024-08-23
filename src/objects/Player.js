@@ -8,25 +8,28 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    this.setScale(this.scene.escalado);
+    this.setScale(scene.escalado);
     this.body.setSize(13, 13);
     this.setCollideWorldBounds(true);
 
+    // Configuración de propiedades del jugador
     this.velocidad = 100;
     this.alive = true;
-    this.isMoving = false; // Controla si el enemigo está en movimiento
-
-    // Dirección en la que se encuentra el jugador
+    this.isMoving = false;
     this.lastDirection = "up";
 
-    // Configuración de las balas
-    this.bullets = this.scene.physics.add.group({
+    // Configuración de balas
+    this.bullets = scene.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.maxBullets = 3; // Número máximo de balas simultáneas
+    this.maxBullets = 3;
     this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
-    this.lastShot = 0; // Tiempo del último
+    this.lastShot = 0;
+
+    // Configuración inicial de sonidos
+    this.walkSound = scene.sound.add("walk", { volume: 0.1, loop: false });
+    this.stopSound = scene.sound.add("stop", { volume: 0.1, loop: true });
   }
 
   update(cursors, spaceBar) {
@@ -34,45 +37,42 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     let velocityX = 0;
     let velocityY = 0;
 
+    // Manejador de movimiento y animaciones
     if (this.isMoving) {
-      // Detectar la dirección en la que el jugador se está moviendo
       if (cursors.up.isDown) {
         velocityY = -this.velocidad;
         this.lastDirection = "up";
-        this.anims.play("up", true);
+        this.playAnimation("up");
       } else if (cursors.down.isDown) {
         velocityY = this.velocidad;
         this.lastDirection = "down";
-        this.anims.play("down", true);
+        this.playAnimation("down");
       } else if (cursors.left.isDown) {
         velocityX = -this.velocidad;
         this.lastDirection = "left";
-        this.anims.play("left", true);
+        this.playAnimation("left");
       } else if (cursors.right.isDown) {
         velocityX = this.velocidad;
         this.lastDirection = "right";
-        this.anims.play("right", true);
+        this.playAnimation("right");
       } else {
-        this.anims.stop();
-        // Reproducir el sonido
-        if (this.scene.stopSound) {
-          this.scene.stopSound.play({
-            volume: 0.1,
-            loop: true,
-          });
-        }
+        this.stopAnimation();
       }
 
-      // Aplica las velocidades calculadas
+      // Aplica las velocidades
       this.setVelocityX(velocityX);
       this.setVelocityY(velocityY);
 
-      // Reproducir el sonido de caminar
-      if ((velocityX !== 0 || velocityY !== 0) && this.scene.walkSound) {
-        this.scene.walkSound.play({
-          volume: 0.1,
-          loop: false,
-        });
+      // Reproduce sonido de caminar si el jugador se mueve
+      if ((velocityX !== 0 || velocityY !== 0) && !this.walkSound.isPlaying) {
+        this.walkSound.play();
+      } else if (
+        velocityX === 0 &&
+        velocityY === 0 &&
+        this.walkSound.isPlaying
+      ) {
+        this.walkSound.stop();
+        this.stopSound.play();
       }
 
       // Manejo de disparos
@@ -87,11 +87,24 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   shoot() {
-    if (this.bullets.getChildren().length < this.maxBullets) {
+    if (this.bullets.getLength() < this.maxBullets) {
       const bullet = this.bullets.get(this.x, this.y);
       if (bullet) {
         bullet.fire(this.x, this.y, this.lastDirection);
       }
+    }
+  }
+
+  playAnimation(direction) {
+    if (!this.anims.isPlaying || this.anims.currentAnim.key !== direction) {
+      this.anims.play(direction, true);
+    }
+  }
+
+  stopAnimation() {
+    if (this.anims.isPlaying) {
+      this.anims.stop();
+      this.stopSound.play();
     }
   }
 }
