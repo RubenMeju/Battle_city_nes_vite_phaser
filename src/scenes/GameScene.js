@@ -142,7 +142,6 @@ export class GameScene extends Phaser.Scene {
 
   balaEnemigoImpactaEnElJugador(player, bullet) {
     console.log("Probando player: ", player);
-    // console.log("Probando bullet: ", bullet);
     if (player && bullet) {
       player.alive = false;
       this.lives--;
@@ -157,7 +156,12 @@ export class GameScene extends Phaser.Scene {
         console.log("animacion completada");
         player.setActive(false);
         player.setVisible(false);
-        //player.destroy();
+        player.isMoving = false;
+
+        // Reaparecer el jugador si aún tiene vidas
+        if (this.lives > 0) {
+          this.playerManager.respawnPlayer();
+        }
       });
     }
   }
