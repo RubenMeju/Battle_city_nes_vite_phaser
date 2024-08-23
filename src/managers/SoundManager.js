@@ -1,4 +1,4 @@
-import { EXPLOSION_VOLUME } from "../config";
+import { EXPLOSION_VOLUME } from '../config';
 
 export class SoundManager {
   constructor(scene) {
@@ -7,9 +7,9 @@ export class SoundManager {
   }
 
   initSounds() {
-    this.explosionSound = this.scene.sound.add("explosion");
-    this.stopSound = this.scene.sound.add("stop");
-    this.walkSound = this.scene.sound.add("walk");
+    this.explosionSound = this.scene.sound.add('explosion');
+    this.stopSound = this.scene.sound.add('stop');
+    this.walkSound = this.scene.sound.add('walk');
   }
 
   playExplosion() {

@@ -1,5 +1,5 @@
-import Phaser from "phaser";
-import { Bullet } from "./Bullet.js";
+import Phaser from 'phaser';
+import { Bullet } from './Bullet.js';
 
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, texture) {
@@ -16,7 +16,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Configuración inicial
     this.velocidad = 100;
     this.alive = true;
-    this.direction = "right"; // Dirección inicial
+    this.direction = 'right'; // Dirección inicial
     this.moveTime = 2000; // Tiempo en milisegundos antes de cambiar de dirección
     this.lastMoveTime = 0; // Tiempo del último cambio de dirección
     this.appearTime = 1500; // Tiempo en milisegundos para la animación de aparición
@@ -25,7 +25,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Configuración de las balas
     this.bullets = this.scene.physics.add.group({
       classType: Bullet,
-      runChildUpdate: true,
+      runChildUpdate: true
     });
     this.maxBullets = 1; // Número máximo de balas simultáneas
     this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
@@ -35,10 +35,10 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setRandomDirection();
 
     // Inicializa la animación de aparición
-    this.play("aparecer");
+    this.play('aparecer');
     this.scene.time.delayedCall(this.appearTime, () => {
       if (this.active) {
-        this.play("down_enemy"); // Cambia a la animación normal después de la animación de aparición
+        this.play('down_enemy'); // Cambia a la animación normal después de la animación de aparición
         this.isMoving = true; // Permite el movimiento después de la animación
         this.lastMoveTime = this.scene.time.now; // Inicializa el tiempo de movimiento después de la animación
       }
@@ -46,7 +46,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   setRandomDirection() {
-    const directions = ["up", "down", "left", "right"];
+    const directions = ['up', 'down', 'left', 'right'];
     this.direction = directions[Phaser.Math.Between(0, directions.length - 1)];
     this.lastDirection = this.direction;
   }
@@ -71,36 +71,31 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   updateMovement() {
     switch (this.direction) {
-      case "up":
+      case 'up':
         this.setVelocityY(-this.velocidad);
         this.setVelocityX(0);
-        this.anims.play("up_enemy", true);
+        this.anims.play('up_enemy', true);
         break;
-      case "down":
+      case 'down':
         this.setVelocityY(this.velocidad);
         this.setVelocityX(0);
-        this.anims.play("down_enemy", true);
+        this.anims.play('down_enemy', true);
         break;
-      case "left":
+      case 'left':
         this.setVelocityX(-this.velocidad);
         this.setVelocityY(0);
-        this.anims.play("left_enemy", true);
+        this.anims.play('left_enemy', true);
         break;
-      case "right":
+      case 'right':
         this.setVelocityX(this.velocidad);
         this.setVelocityY(0);
-        this.anims.play("right_enemy", true);
+        this.anims.play('right_enemy', true);
         break;
     }
   }
 
   isColliding() {
-    return (
-      this.body.blocked.left ||
-      this.body.blocked.right ||
-      this.body.blocked.up ||
-      this.body.blocked.down
-    );
+    return this.body.blocked.left || this.body.blocked.right || this.body.blocked.up || this.body.blocked.down;
   }
 
   shoot() {

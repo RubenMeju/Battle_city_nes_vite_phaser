@@ -1,27 +1,34 @@
-import pluginJs from "@eslint/js";
-import globals from "globals";
-import prettierPlugin from "eslint-plugin-prettier";
-import prettierConfig from "eslint-config-prettier";
+import globals from 'globals';
+import js from '@eslint/js';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default [
   {
-    languageOptions: {
-      globals: globals.browser,
-    },
+    files: ['**/*.js', '**/*.jsx']
   },
-  pluginJs.configs.recommended,
   {
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      ...prettierConfig.rules,
-      "prettier/prettier": [
-        "error",
-        {
-          endOfLine: "lf", // Asegúrate de que Prettier use LF
-        },
-      ],
-    },
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node
+      }
+    }
   },
+  js.configs.recommended,
+  prettierRecommended,
+  {
+    rules: {
+      'no-console': 'warn',
+      'prettier/prettier': [
+        'warn',
+        {
+          arrowParens: 'avoid',
+          printWidth: 120,
+          semi: true,
+          singleQuote: true,
+          trailingComma: 'none'
+        }
+      ]
+    }
+  }
 ];

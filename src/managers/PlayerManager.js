@@ -1,4 +1,4 @@
-import { Player } from "../objects/Player.js";
+import { Player } from '../objects/Player.js';
 
 export class PlayerManager {
   constructor(scene) {
@@ -8,13 +8,7 @@ export class PlayerManager {
   }
 
   createPlayer() {
-    this.player = new Player(
-      this.scene,
-      this.initialPosition.x,
-      this.initialPosition.y,
-      "tiles",
-      0,
-    );
+    this.player = new Player(this.scene, this.initialPosition.x, this.initialPosition.y, 'tiles', 0);
 
     // Obtener la referencia a los bloques sólidos desde MapManager
     const blocks = this.scene.mapManager.getBlocks();
@@ -29,16 +23,16 @@ export class PlayerManager {
         blocks.solidos,
         this.scene.handleBulletBlockCollision.bind(this.scene),
         null,
-        this.scene,
+        this.scene
       );
     }
 
     // Configuración inicial
-    this.player.play("aparecer"); // Reproduce la animación de aparición
+    this.player.play('aparecer'); // Reproduce la animación de aparición
     this.scene.time.delayedCall(1500, () => {
       if (this.player.active) {
         this.player.isMoving = true;
-        this.player.play("up"); // Cambia a la animación normal después de 1.5 segundos
+        this.player.play('up'); // Cambia a la animación normal después de 1.5 segundos
       }
     });
   }
@@ -58,11 +52,11 @@ export class PlayerManager {
       this.player.setPosition(this.initialPosition.x, this.initialPosition.y);
       this.player.setVelocity(0);
       this.player.alive = true;
-      this.player.play("aparecer"); // Reproduce la animación de aparición al reaparecer
+      this.player.play('aparecer'); // Reproduce la animación de aparición al reaparecer
       this.scene.time.delayedCall(1500, () => {
         if (this.player.active) {
           this.player.isMoving = true;
-          this.player.play("up"); // Cambia a la animación normal después de 1.5 segundos
+          this.player.play('up'); // Cambia a la animación normal después de 1.5 segundos
         }
       });
     }

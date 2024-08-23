@@ -1,4 +1,4 @@
-import { Hub } from "../objects/Hub.js";
+import { Hub } from '../objects/Hub.js';
 
 export class HudManager {
   constructor(scene) {
