@@ -16,7 +16,12 @@ export default [
     },
     rules: {
       ...prettierConfig.rules,
-      "prettier/prettier": "error",
+      "prettier/prettier": [
+        "error",
+        {
+          endOfLine: "lf", // Asegúrate de que Prettier use LF
+        },
+      ],
     },
   },
 ];
