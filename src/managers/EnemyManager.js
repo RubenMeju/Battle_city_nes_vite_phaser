@@ -52,7 +52,7 @@ export class EnemyManager {
       this.scene.physics.add.collider(
         this.scene.playerManager.player.bullets,
         this.enemies,
-        this.scene.balaJugadorImpactaEnElEnemigo, // Función que maneja el impacto de la bala en el enemigo
+        this.balaJugadorImpactaEnElEnemigo, // Función que maneja el impacto de la bala en el enemigo
         null,
         this.scene,
       );
@@ -64,13 +64,59 @@ export class EnemyManager {
         this.enemies.children
           .getArray() // Obtiene un array de enemigos del grupo de enemigos
           .flatMap((enemy) => enemy.bullets), // Aplana los arrays de balas de cada enemigo en uno solo
-        this.scene.balaEnemigoImpactaEnElJugador, // Función que maneja el impacto de la bala enemiga en el jugador
+        this.balaEnemigoImpactaEnElJugador, // Función que maneja el impacto de la bala enemiga en el jugador
         null,
         this.scene,
       );
 
       this.enemiesCreated++;
       this.enemiesRemaining++;
+    }
+  }
+
+  balaJugadorImpactaEnElEnemigo(enemy, bullet) {
+    console.log("ENEMIGO MUERTO");
+    if (enemy && bullet) {
+      enemy.alive = false;
+      bullet.destroy();
+
+      enemy.setVelocity(0);
+      enemy.anims.play("destruccion", true);
+      this.soundManager.playExplosion();
+
+      enemy.once("animationcomplete-destruccion", () => {
+        //   console.log("animation complete mejuuuuuuu");
+        enemy.destroy();
+        this.enemyManager.enemiesRemaining--;
+        if (this.enemyManager.enemiesRemaining === 0) {
+          this.enemyManager.checkNextWave();
+        }
+      });
+    }
+  }
+
+  balaEnemigoImpactaEnElJugador(player, bullet) {
+    console.log("JUGADOR MUERTO: ", player);
+    if (player && bullet) {
+      player.alive = false;
+
+      bullet.destroy();
+
+      player.setVelocity(0);
+      this.soundManager.playExplosion();
+      player.anims.play("destruccion", true);
+
+      player.once("animationcomplete-destruccion", () => {
+        //   console.log("animacion completada");
+        player.setActive(false);
+        player.setVisible(false);
+        player.isMoving = false;
+
+        // Reaparecer el jugador si aún tiene vidas
+        if (this.lives > 0) {
+          this.playerManager.respawnPlayer();
+        }
+      });
     }
   }
 
