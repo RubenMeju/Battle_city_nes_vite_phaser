@@ -100,7 +100,6 @@ export class EnemyManager {
     console.log("JUGADOR MUERTO: ", player);
     if (player && bullet) {
       player.alive = false;
-      player.disableBody(false, false);
 
       bullet.destroy();
 
