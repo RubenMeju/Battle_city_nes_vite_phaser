@@ -16,24 +16,29 @@ export class PlayerManager {
       0,
     );
 
-    // Colisión entre el jugador y los bloques sólidos
-    this.scene.physics.add.collider(this.player, this.scene.bloques.solidos);
+    // Obtener la referencia a los bloques sólidos desde MapManager
+    const blocks = this.scene.mapManager.getBlocks();
 
-    // Colisión entre las balas del jugador y los bloques sólidos
-    this.scene.physics.add.collider(
-      this.player.bullets,
-      this.scene.bloques.solidos,
-      this.scene.handleBulletBlockCollision, // Función que maneja lo que sucede al chocar con un bloque
-      null,
-      this.scene,
-    );
+    // Colisión entre el jugador y los bloques sólidos
+    if (blocks && blocks.solidos) {
+      this.scene.physics.add.collider(this.player, blocks.solidos);
+
+      // Colisión entre las balas del jugador y los bloques sólidos
+      this.scene.physics.add.collider(
+        this.player.bullets,
+        blocks.solidos,
+        this.scene.handleBulletBlockCollision.bind(this.scene),
+        null,
+        this.scene,
+      );
+    }
 
     // Configuración inicial
     this.player.play("aparecer"); // Reproduce la animación de aparición
     this.scene.time.delayedCall(1500, () => {
       if (this.player.active) {
         this.player.isMoving = true;
-        this.player.play("up"); // Cambia a la animación normal después de 3 segundos
+        this.player.play("up"); // Cambia a la animación normal después de 1.5 segundos
       }
     });
   }
@@ -57,7 +62,7 @@ export class PlayerManager {
       this.scene.time.delayedCall(1500, () => {
         if (this.player.active) {
           this.player.isMoving = true;
-          this.player.play("up"); // Cambia a la animación normal después de 3 segundos
+          this.player.play("up"); // Cambia a la animación normal después de 1.5 segundos
         }
       });
     }

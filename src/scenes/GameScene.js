@@ -1,27 +1,22 @@
 import Phaser from "phaser";
 import { createAnimations } from "../animations.js";
-import { Bloque } from "../objects/Bloque.js";
 import { PlayerManager } from "../managers/PlayerManager.js";
 import { EnemyManager } from "../managers/EnemyManager.js";
 import { HudManager } from "../managers/HubManager.js";
 import { SoundManager } from "../managers/SoundManager.js";
-import {
-  ENEMY_SPAWN_DELAY,
-  TILE_SIZE,
-  RIGHT_LIMIT_X,
-  RIGHT_LIMIT_Y,
-  RIGHT_LIMIT_WIDTH,
-  RIGHT_LIMIT_HEIGHT,
-} from "../config.js";
+import { MapManager } from "../managers/MapManager.js";
+import { ENEMY_SPAWN_DELAY, TILE_SIZE } from "../config.js";
+
+const INITIAL_LIVES = 3;
+const INITIAL_ENEMY_COUNT = 9;
 
 export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene" });
-
     this.escalado = 3;
     this.maxBombas = 3;
-    this.totalEnemies = 9;
-    this.lives = 3;
+    this.totalEnemies = INITIAL_ENEMY_COUNT;
+    this.lives = INITIAL_LIVES;
   }
 
   preload() {
@@ -44,52 +39,17 @@ export class GameScene extends Phaser.Scene {
     createAnimations(this);
 
     this.hudManager = new HudManager(this);
-    this.createMap();
-    this.createBlocks();
+    this.mapManager = new MapManager(this); // Crea una instancia de MapManager
+
+    this.mapManager.createMap();
+    this.mapManager.createBlocks();
     this.playerManager = new PlayerManager(this);
-
     this.enemyManager = new EnemyManager(this);
-
     this.enemies = this.enemyManager.enemies;
 
-    this.createRightLimit();
+    this.mapManager.createRightLimit();
     this.setupControls();
-
-    this.enemyTimer = this.time.addEvent({
-      delay: ENEMY_SPAWN_DELAY,
-      callback: this.enemyManager.checkNextWave,
-      callbackScope: this.enemyManager,
-      loop: true,
-    });
-  }
-
-  createMap() {
-    this.mapa = this.make.tilemap({ key: "mapa" });
-  }
-
-  createBlocks() {
-    this.bloques = new Bloque(this, this.mapa, "tileSets", "solidos", {
-      bloques: true,
-    });
-  }
-
-  createRightLimit() {
-    this.rightLimit = this.add.rectangle(
-      RIGHT_LIMIT_X,
-      RIGHT_LIMIT_Y,
-      RIGHT_LIMIT_WIDTH,
-      RIGHT_LIMIT_HEIGHT,
-      0x000000,
-      0,
-    );
-    this.physics.world.enable(this.rightLimit);
-    this.rightLimit.body.setImmovable(true);
-    this.rightLimit.body.setAllowGravity(false);
-
-    this.physics.add.collider(this.playerManager.player, this.rightLimit);
-    this.enemyManager.enemies.children.iterate((enemy) => {
-      this.physics.add.collider(enemy, this.rightLimit);
-    });
+    this.setupEnemyTimer();
   }
 
   setupControls() {
@@ -99,11 +59,17 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  update(time, delta) {
-    if (this.lives <= 0) {
-      this.scene.start("GameOverScene");
-    }
+  setupEnemyTimer() {
+    this.enemyTimer = this.time.addEvent({
+      delay: ENEMY_SPAWN_DELAY,
+      callback: this.enemyManager.checkNextWave,
+      callbackScope: this.enemyManager,
+      loop: true,
+    });
+  }
 
+  update(time, delta) {
+    this.handleGameOver();
     if (this.playerManager.player.alive) {
       this.playerManager.update(this.cursors, this.spaceBar);
     }
@@ -116,8 +82,14 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
+  handleGameOver() {
+    if (this.lives <= 0) {
+      this.scene.start("GameOverScene");
+    }
+  }
+
   handleBulletBlockCollision(bullet, tile) {
     bullet.destroy();
-    this.bloques.destroyBlock(tile, bullet.direction);
+    this.mapManager.getBlocks().destroyBlock(tile, bullet.direction);
   }
 }

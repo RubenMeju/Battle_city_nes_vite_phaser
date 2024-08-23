@@ -36,13 +36,16 @@ export class EnemyManager {
         }
       });
 
+      // Obtener la referencia a los bloques sólidos desde MapManager
+      const blocks = this.scene.mapManager.getBlocks();
+
       // Agregar colisiones
       this.enemies.add(enemy);
-      this.scene.physics.add.collider(enemy, this.scene.bloques.solidos);
+      this.scene.physics.add.collider(enemy, blocks.solidos);
       this.scene.physics.add.collider(enemy, this.scene.rightLimit);
       this.scene.physics.add.collider(
         enemy.bullets,
-        this.scene.bloques.solidos,
+        blocks.solidos,
         this.scene.handleBulletBlockCollision,
         null,
         this.scene,
