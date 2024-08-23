@@ -23,7 +23,7 @@ export class GameOverScene extends Phaser.Scene {
       .text(
         this.scale.width / 2,
         this.scale.height / 2 + 20,
-        "Press SPACE to Restart",
+        "Press ENTER to Restart",
         {
           fontSize: "32px",
           fill: "#ffffff",
@@ -32,13 +32,10 @@ export class GameOverScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     // Añadir una tecla de entrada para reiniciar el juego
-    this.spaceBar = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE,
-    );
-
+    this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
     // Opción para volver a la escena principal
-    this.input.keyboard.on("keydown-SPACE", () => {
-      this.scene.start("GameScene"); // Reinicia el juego al presionar SPACE
+    this.input.keyboard.on("keydown-ENTER", () => {
+      this.scene.start("GameScene"); // Reinicia el juego al presionar ENTER
     });
   }
 }
