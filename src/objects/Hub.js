@@ -13,19 +13,25 @@ export class Hub {
     this.grayPanel.setOrigin(0, 0);
 
     // Crear el texto de las vidas
-    this.livesText = this.scene.add.text(635, 460, `Lives: ${this.scene.lives}`, {
-      fontSize: '20px',
-      fill: '#fff'
-    });
+    this.livesText = this.scene.add.text(
+      635,
+      460,
+      `Lives: ${this.scene.lives}`,
+      {
+        fontSize: "20px",
+        fill: "#fff",
+      },
+    );
   }
 
   createEnemies(enemyCount) {
     const { x, y, width, height } = this.getEnemyCropData();
-    const { startX, startY, xOffset, yOffset, enemiesPerColumn } = this.getEnemyGridData(enemyCount);
+    const { startX, startY, xOffset, yOffset, enemiesPerColumn } =
+      this.getEnemyGridData(enemyCount);
 
     // Eliminar cualquier imagen de enemigos anterior
     if (this.enemyImages) {
-      this.enemyImages.forEach(image => image.destroy());
+      this.enemyImages.forEach((image) => image.destroy());
     }
 
     this.enemyImages = []; // Reiniciar el array de imágenes
@@ -34,7 +40,10 @@ export class Hub {
       const posX = startX + Math.floor(i / enemiesPerColumn) * xOffset;
       const posY = startY + (i % enemiesPerColumn) * yOffset;
 
-      const croppedImage = this.scene.add.image(posX, posY, 'tileSets').setCrop(x, y, width, height).setScale(2.5);
+      const croppedImage = this.scene.add
+        .image(posX, posY, "tileSets")
+        .setCrop(x, y, width, height)
+        .setScale(2.5);
 
       this.enemyImages.push(croppedImage); // Almacenar la imagen
     }
@@ -45,7 +54,7 @@ export class Hub {
       x: 320,
       y: 192,
       width: 9,
-      height: 8
+      height: 8,
     };
   }
 
@@ -56,7 +65,7 @@ export class Hub {
       startY: 0,
       xOffset: 28,
       yOffset: 28,
-      enemiesPerColumn
+      enemiesPerColumn,
     };
   }
 

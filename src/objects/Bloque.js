@@ -22,20 +22,28 @@ export class Bloque {
       const blockEndY = blockStartY + 3;
 
       // Función para eliminar bloques en una columna dentro del bloque 4x4
-      const destroyColumn = x => {
+      const destroyColumn = (x) => {
         for (let y = blockStartY; y <= blockEndY; y++) {
           let tileToRemove = this.mapa.getTileAt(x, y, true, this.solidos);
-          if (tileToRemove && tileToRemove.index !== -1 && tileToRemove.properties.destruible) {
+          if (
+            tileToRemove &&
+            tileToRemove.index !== -1 &&
+            tileToRemove.properties.destruible
+          ) {
             this.mapa.removeTileAt(x, y, true, true, this.solidos);
           }
         }
       };
 
       // Función para eliminar bloques en una fila dentro del bloque 4x4
-      const destroyRow = y => {
+      const destroyRow = (y) => {
         for (let x = blockStartX; x <= blockEndX; x++) {
           let tileToRemove = this.mapa.getTileAt(x, y, true, this.solidos);
-          if (tileToRemove && tileToRemove.index !== -1 && tileToRemove.properties.destruible) {
+          if (
+            tileToRemove &&
+            tileToRemove.index !== -1 &&
+            tileToRemove.properties.destruible
+          ) {
             this.mapa.removeTileAt(x, y, true, true, this.solidos);
           }
         }
@@ -43,12 +51,12 @@ export class Bloque {
 
       // Eliminar bloques en la fila o columna según la dirección de la colisión dentro del bloque 4x4
       switch (direction) {
-        case 'up':
-        case 'down':
+        case "up":
+        case "down":
           destroyRow(tile.y); // Eliminar en horizontal (fila) dentro del bloque 4x4
           break;
-        case 'left':
-        case 'right':
+        case "left":
+        case "right":
           destroyColumn(tile.x); // Eliminar en vertical (columna) dentro del bloque 4x4
           break;
       }

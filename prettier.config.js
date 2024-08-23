@@ -1,7 +1,8 @@
 export default {
-  arrowParens: 'avoid',
-  printWidth: 120,
-  semi: true,
+  trailingComma: "es5",
+  endOfLine: "auto",
   singleQuote: true,
-  trailingComma: 'none'
+  printWidth: 80,
+  tabWidth: 2,
+  semi: true,
 };
