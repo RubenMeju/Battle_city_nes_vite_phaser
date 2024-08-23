@@ -5,10 +5,11 @@ import { EnemyManager } from "../managers/EnemyManager.js";
 import { HudManager } from "../managers/HubManager.js";
 import { SoundManager } from "../managers/SoundManager.js";
 import { MapManager } from "../managers/MapManager.js";
-import { ENEMY_SPAWN_DELAY, TILE_SIZE } from "../config.js";
-
-const INITIAL_LIVES = 3;
-const INITIAL_ENEMY_COUNT = 9;
+import {
+  ENEMY_SPAWN_DELAY,
+  INITIAL_ENEMY_COUNT,
+  TILE_SIZE,
+} from "../config.js";
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -16,9 +17,10 @@ export class GameScene extends Phaser.Scene {
     this.escalado = 3;
     this.maxBombas = 3;
     this.totalEnemies = INITIAL_ENEMY_COUNT;
-    this.lives = INITIAL_LIVES;
   }
-
+  init(data) {
+    this.lives = data.lives || 1;
+  }
   preload() {
     this.load.spritesheet("tiles", "assets/sprites1.png", {
       frameWidth: TILE_SIZE,
@@ -36,8 +38,9 @@ export class GameScene extends Phaser.Scene {
 
   create() {
     this.soundManager = new SoundManager(this);
-    createAnimations(this);
-
+    if (!this.anims.get("up")) {
+      createAnimations(this);
+    }
     this.hudManager = new HudManager(this);
     this.mapManager = new MapManager(this); // Crea una instancia de MapManager
 

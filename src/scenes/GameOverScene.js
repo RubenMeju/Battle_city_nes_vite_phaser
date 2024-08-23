@@ -35,7 +35,7 @@ export class GameOverScene extends Phaser.Scene {
     this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
     // Opción para volver a la escena principal
     this.input.keyboard.on("keydown-ENTER", () => {
-      this.scene.start("GameScene"); // Reinicia el juego al presionar ENTER
+      this.scene.start("GameScene", { lives: 3 }); // Pasa las vidas al reiniciar
     });
   }
 }
