@@ -46,11 +46,12 @@ export class GameScene extends Phaser.Scene {
     this.hudManager = new HudManager(this);
     this.createMap();
     this.createBlocks();
+    this.playerManager = new PlayerManager(this);
+
     this.enemyManager = new EnemyManager(this);
 
     this.enemies = this.enemyManager.enemies;
 
-    this.playerManager = new PlayerManager(this);
     this.createRightLimit();
     this.setupControls();
 
@@ -121,6 +122,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   balaJugadorImpactaEnElEnemigo(enemy, bullet) {
+    console.log("ENEMIGO MUERTO");
     if (enemy && bullet) {
       enemy.alive = false;
       bullet.destroy();
@@ -130,7 +132,7 @@ export class GameScene extends Phaser.Scene {
       this.soundManager.playExplosion();
 
       enemy.once("animationcomplete-destruccion", () => {
-        console.log("animation complete mejuuuuuuu");
+        //   console.log("animation complete mejuuuuuuu");
         enemy.destroy();
         this.enemyManager.enemiesRemaining--;
         if (this.enemyManager.enemiesRemaining === 0) {
@@ -141,7 +143,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   balaEnemigoImpactaEnElJugador(player, bullet) {
-    console.log("Probando player: ", player);
+    console.log("JUGADOR MUERTO: ", player);
     if (player && bullet) {
       player.alive = false;
 
@@ -152,7 +154,7 @@ export class GameScene extends Phaser.Scene {
       player.anims.play("destruccion", true);
 
       player.once("animationcomplete-destruccion", () => {
-        console.log("animacion completada");
+        //   console.log("animacion completada");
         player.setActive(false);
         player.setVisible(false);
         player.isMoving = false;

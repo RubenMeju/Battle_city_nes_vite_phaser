@@ -48,6 +48,27 @@ export class EnemyManager {
         this.scene,
       );
 
+      // Colisión entre las balas del jugador y los enemigos
+      this.scene.physics.add.collider(
+        this.scene.playerManager.player.bullets,
+        this.enemies,
+        this.scene.balaJugadorImpactaEnElEnemigo, // Función que maneja el impacto de la bala en el enemigo
+        null,
+        this.scene,
+      );
+
+      // Colisión entre las balas de los enemigos y el jugador
+      // Aplica daño al jugador cuando es  por una bala enemiga
+      this.scene.physics.add.collider(
+        this.scene.playerManager.player,
+        this.enemies.children
+          .getArray() // Obtiene un array de enemigos del grupo de enemigos
+          .flatMap((enemy) => enemy.bullets), // Aplana los arrays de balas de cada enemigo en uno solo
+        this.scene.balaEnemigoImpactaEnElJugador, // Función que maneja el impacto de la bala enemiga en el jugador
+        null,
+        this.scene,
+      );
+
       this.enemiesCreated++;
       this.enemiesRemaining++;
     }

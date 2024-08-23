@@ -16,31 +16,14 @@ export class PlayerManager {
       0,
     );
 
+    // Colisión entre el jugador y los bloques sólidos
     this.scene.physics.add.collider(this.player, this.scene.bloques.solidos);
 
-    // Configurar colisiones
+    // Colisión entre las balas del jugador y los bloques sólidos
     this.scene.physics.add.collider(
       this.player.bullets,
       this.scene.bloques.solidos,
-      this.scene.handleBulletBlockCollision,
-      null,
-      this.scene,
-    );
-
-    this.scene.physics.add.collider(
-      this.player.bullets,
-      this.scene.enemies,
-      this.scene.balaJugadorImpactaEnElEnemigo,
-      null,
-      this.scene,
-    );
-
-    this.scene.physics.add.collider(
-      this.player,
-      this.scene.enemyManager.enemies.children
-        .getArray()
-        .flatMap((enemy) => enemy.bullets),
-      this.scene.balaEnemigoImpactaEnElJugador,
+      this.scene.handleBulletBlockCollision, // Función que maneja lo que sucede al chocar con un bloque
       null,
       this.scene,
     );
