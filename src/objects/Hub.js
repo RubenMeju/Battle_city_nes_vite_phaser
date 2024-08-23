@@ -20,7 +20,7 @@ export class Hub {
       {
         fontSize: "20px",
         fill: "#fff",
-      }
+      },
     );
   }
 

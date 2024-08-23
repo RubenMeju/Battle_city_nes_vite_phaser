@@ -13,7 +13,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.body.setOffset(0, 0); // Ajusta el offset para centrar el cuerpo de colisión
 
     this.setCollideWorldBounds(true);
-
     // Configuración inicial
     this.velocidad = 100;
     this.alive = true;

@@ -25,7 +25,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     });
     this.maxBullets = 3; // Número máximo de balas simultáneas
     this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
-    this.lastShot = 0; // Tiempo del último disparo
+    this.lastShot = 0; // Tiempo del último
   }
 
   update(cursors, spaceBar) {

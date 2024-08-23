@@ -16,14 +16,14 @@ export class PlayerManager {
       this.scene.bloques.solidos,
       this.scene.handleBulletBlockCollision,
       null,
-      this.scene
+      this.scene,
     );
     this.scene.physics.add.collider(
       this.player.bullets,
       this.scene.enemies,
       this.scene.balaJugadorImpactaEnElEnemigo,
       null,
-      this.scene
+      this.scene,
     );
 
     this.scene.physics.add.collider(
@@ -33,8 +33,16 @@ export class PlayerManager {
         .flatMap((enemy) => enemy.bullets),
       this.scene.balaEnemigoImpactaEnElJugador,
       null,
-      this.scene
+      this.scene,
     );
+
+    // Configuración inicial
+    this.player.play("aparecer"); // Reproduce la animación de aparición
+    this.scene.time.delayedCall(1500, () => {
+      if (this.player.active) {
+        this.player.play("down"); // Cambia a la animación normal después de 3 segundos
+      }
+    });
   }
 
   update(cursors, spaceBar) {

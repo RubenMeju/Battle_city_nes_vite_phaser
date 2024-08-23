@@ -27,13 +27,13 @@ export class GameOverScene extends Phaser.Scene {
         {
           fontSize: "32px",
           fill: "#ffffff",
-        }
+        },
       )
       .setOrigin(0.5);
 
     // Añadir una tecla de entrada para reiniciar el juego
     this.spaceBar = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
     );
 
     // Opción para volver a la escena principal

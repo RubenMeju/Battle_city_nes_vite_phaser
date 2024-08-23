@@ -79,7 +79,7 @@ export class GameScene extends Phaser.Scene {
       RIGHT_LIMIT_WIDTH,
       RIGHT_LIMIT_HEIGHT,
       0x000000,
-      0
+      0,
     );
     this.physics.world.enable(this.rightLimit);
     this.rightLimit.body.setImmovable(true);
@@ -94,7 +94,7 @@ export class GameScene extends Phaser.Scene {
   setupControls() {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spaceBar = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
     );
   }
 
@@ -111,7 +111,7 @@ export class GameScene extends Phaser.Scene {
     this.hudManager.updateEnemies(
       this.totalEnemies -
         this.enemyManager.enemiesCreated +
-        this.enemyManager.enemiesRemaining
+        this.enemyManager.enemiesRemaining,
     );
   }
 
@@ -156,8 +156,8 @@ export class GameScene extends Phaser.Scene {
       player.once("animationcomplete-destruccion", () => {
         console.log("animacion completada");
         player.setActive(false);
-
-        player.destroy();
+        player.setVisible(false);
+        //player.destroy();
       });
     }
   }

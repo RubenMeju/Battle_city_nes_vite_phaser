@@ -45,7 +45,7 @@ export class EnemyManager {
         this.scene.bloques.solidos,
         this.scene.handleBulletBlockCollision,
         null,
-        this.scene
+        this.scene,
       );
 
       this.enemiesCreated++;
