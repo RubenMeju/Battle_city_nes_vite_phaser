@@ -18,6 +18,7 @@ export class PlayerManager {
       null,
       this.scene,
     );
+
     this.scene.physics.add.collider(
       this.player.bullets,
       this.scene.enemies,
@@ -40,7 +41,8 @@ export class PlayerManager {
     this.player.play("aparecer"); // Reproduce la animación de aparición
     this.scene.time.delayedCall(1500, () => {
       if (this.player.active) {
-        this.player.play("down"); // Cambia a la animación normal después de 3 segundos
+        this.player.isMoving = true;
+        this.player.play("up"); // Cambia a la animación normal después de 3 segundos
       }
     });
   }
