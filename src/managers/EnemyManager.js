@@ -75,9 +75,10 @@ export class EnemyManager {
   }
 
   balaJugadorImpactaEnElEnemigo(enemy, bullet) {
-    console.log("ENEMIGO MUERTO");
+    console.log("ENEMIGO MUERTO", enemy);
     if (enemy && bullet) {
       enemy.alive = false;
+      enemy.disableBody(false, false);
       bullet.destroy();
 
       enemy.setVelocity(0);
@@ -85,7 +86,7 @@ export class EnemyManager {
       this.soundManager.playExplosion();
 
       enemy.once("animationcomplete-destruccion", () => {
-        //   console.log("animation complete mejuuuuuuu");
+        console.log("animation complete mejuuuuuuu");
         enemy.destroy();
         this.enemyManager.enemiesRemaining--;
         if (this.enemyManager.enemiesRemaining === 0) {
@@ -99,6 +100,7 @@ export class EnemyManager {
     console.log("JUGADOR MUERTO: ", player);
     if (player && bullet) {
       player.alive = false;
+      player.disableBody(false, false);
 
       bullet.destroy();
 
