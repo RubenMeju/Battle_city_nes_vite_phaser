@@ -15,9 +15,9 @@ export class EnemyManager {
 
   generateEnemies(num) {
     const enemyPositions = [
-      { x: 50, y: 0 },
-      { x: this.scene.scale.width / 2, y: 0 },
-      { x: this.scene.scale.width - 200, y: 0 },
+      { x: 25, y: 0 },
+      { x: this.scene.scale.width / 2 - 60, y: 0 },
+      { x: this.scene.scale.width - 150, y: 0 },
     ];
 
     const remainingEnemiesToCreate =
