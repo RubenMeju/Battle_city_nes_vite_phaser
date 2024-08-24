@@ -29,20 +29,25 @@ export class EnemyManager {
       const enemy = new Enemy(this.scene, position.x, position.y, 'enemy');
 
       // Configuración inicial
-      enemy.play('aparecer'); // Reproduce la animación de aparición
+      enemy.play('aparecer');
       this.scene.time.delayedCall(1500, () => {
         if (enemy.active) {
-          enemy.play('down_enemy'); // Cambia a la animación normal después de 3 segundos
+          enemy.play('down_enemy');
         }
       });
 
-      // Obtener la referencia a los bloques sólidos desde MapManager
+      // Obtener la referencia a los bloques sólidos y al límite derecho
       const blocks = this.scene.mapManager.getBlocks();
+      const rightLimit = this.scene.mapManager.getRightLimit();
 
       // Agregar colisiones
       this.enemies.add(enemy);
       this.scene.physics.add.collider(enemy, blocks.solidos);
-      this.scene.physics.add.collider(enemy, this.scene.rightLimit);
+
+      // Colisión con el límite derecho
+      this.scene.physics.add.collider(enemy, rightLimit);
+
+      // Otras colisiones
       this.scene.physics.add.collider(
         enemy.bullets,
         blocks.solidos,
@@ -51,23 +56,18 @@ export class EnemyManager {
         this.scene
       );
 
-      // Colisión entre las balas del jugador y los enemigos
       this.scene.physics.add.collider(
         this.scene.playerManager.player.bullets,
         this.enemies,
-        this.balaJugadorImpactaEnElEnemigo, // Función que maneja el impacto de la bala en el enemigo
+        this.balaJugadorImpactaEnElEnemigo,
         null,
         this.scene
       );
 
-      // Colisión entre las balas de los enemigos y el jugador
-      // Aplica daño al jugador cuando es  por una bala enemiga
       this.scene.physics.add.collider(
         this.scene.playerManager.player,
-        this.enemies.children
-          .getArray() // Obtiene un array de enemigos del grupo de enemigos
-          .flatMap((enemy) => enemy.bullets), // Aplana los arrays de balas de cada enemigo en uno solo
-        this.balaEnemigoImpactaEnElJugador, // Función que maneja el impacto de la bala enemiga en el jugador
+        this.enemies.children.getArray().flatMap((enemy) => enemy.bullets),
+        this.balaEnemigoImpactaEnElJugador,
         null,
         this.scene
       );
