@@ -1,13 +1,13 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export class StartScene extends Phaser.Scene {
   constructor() {
-    super({ key: "StartScene" });
+    super({ key: 'StartScene' });
   }
 
   preload() {
     // Cargar la imagen de título
-    this.load.image("titleImage", "assets/startgame.png");
+    this.load.image('titleImage', 'assets/startgame.png');
   }
 
   create() {
@@ -16,7 +16,7 @@ export class StartScene extends Phaser.Scene {
       .image(
         this.scale.width / 2,
         this.scale.height + 100, // Posición inicial fuera de la pantalla
-        "titleImage",
+        'titleImage'
       )
       .setScale(2.8)
       .setOrigin(0.5);
@@ -26,12 +26,12 @@ export class StartScene extends Phaser.Scene {
       targets: titleImage,
       y: this.scale.height / 2 - 50, // Posición final de la imagen
       duration: 3000, // Duración en milisegundos
-      ease: "Sine", // Tipo de suavizado de la animación
+      ease: 'Sine', // Tipo de suavizado de la animación
     });
 
     // Añadir una tecla de entrada para iniciar el juego
-    this.input.keyboard.once("keydown-ENTER", () => {
-      this.scene.start("GameScene"); // Cambia a la escena principal
+    this.input.keyboard.once('keydown-ENTER', () => {
+      this.scene.start('GameScene'); // Cambia a la escena principal
     });
   }
 }

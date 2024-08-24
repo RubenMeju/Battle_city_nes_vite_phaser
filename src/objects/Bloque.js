@@ -51,12 +51,12 @@ export class Bloque {
 
       // Eliminar bloques en la fila o columna según la dirección de la colisión dentro del bloque 4x4
       switch (direction) {
-        case "up":
-        case "down":
+        case 'up':
+        case 'down':
           destroyRow(tile.y); // Eliminar en horizontal (fila) dentro del bloque 4x4
           break;
-        case "left":
-        case "right":
+        case 'left':
+        case 'right':
           destroyColumn(tile.x); // Eliminar en vertical (columna) dentro del bloque 4x4
           break;
       }

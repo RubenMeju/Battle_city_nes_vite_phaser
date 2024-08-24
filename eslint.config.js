@@ -1,10 +1,10 @@
-import globals from "globals";
-import js from "@eslint/js";
-import prettierRecommended from "eslint-plugin-prettier/recommended";
+import globals from 'globals';
+import js from '@eslint/js';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default [
   {
-    files: ["**/*.js", "**/*.jsx"],
+    files: ['**/*.js', '**/*.jsx'],
   },
   {
     languageOptions: {
@@ -18,8 +18,8 @@ export default [
   prettierRecommended,
   {
     rules: {
-      "no-console": "warn",
-      "prettier/prettier": ["error", { endOfLine: "auto" }],
+      'no-console': 'warn',
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
 ];

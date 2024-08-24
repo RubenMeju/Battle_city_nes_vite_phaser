@@ -1,6 +1,6 @@
 export default {
-  trailingComma: "es5",
-  endOfLine: "auto",
+  trailingComma: 'es5',
+  endOfLine: 'auto',
   singleQuote: true,
   printWidth: 80,
   tabWidth: 2,

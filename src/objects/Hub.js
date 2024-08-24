@@ -18,9 +18,9 @@ export class Hub {
       460,
       `Lives: ${this.scene.lives}`,
       {
-        fontSize: "20px",
-        fill: "#fff",
-      },
+        fontSize: '20px',
+        fill: '#fff',
+      }
     );
   }
 
@@ -41,7 +41,7 @@ export class Hub {
       const posY = startY + (i % enemiesPerColumn) * yOffset;
 
       const croppedImage = this.scene.add
-        .image(posX, posY, "tileSets")
+        .image(posX, posY, 'tileSets')
         .setCrop(x, y, width, height)
         .setScale(2.5);
 

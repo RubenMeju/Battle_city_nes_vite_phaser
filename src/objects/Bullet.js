@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export class Bullet extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -12,14 +12,14 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.graphics.fillStyle(0xffffff, 1); // Color blanco
     this.graphics.fillCircle(0, 0, 5); // Radio de 5 píxeles
 
-    this.texture = this.graphics.generateTexture("bulletTexture", 10, 10);
-    this.setTexture("bulletTexture");
+    this.texture = this.graphics.generateTexture('bulletTexture', 10, 10);
+    this.setTexture('bulletTexture');
 
     this.setScale(1);
     this.body.setSize(10, 10);
     this.setCollideWorldBounds(true);
     this.body.onWorldBounds = true;
-    this.body.world.on("worldbounds", this.destroy, this);
+    this.body.world.on('worldbounds', this.destroy, this);
   }
 
   fire(x, y, direction) {
@@ -30,16 +30,16 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     let velocity = 300;
     switch (direction) {
-      case "up":
+      case 'up':
         this.setVelocityY(-velocity);
         break;
-      case "down":
+      case 'down':
         this.setVelocityY(velocity);
         break;
-      case "left":
+      case 'left':
         this.setVelocityX(-velocity);
         break;
-      case "right":
+      case 'right':
         this.setVelocityX(velocity);
         break;
     }

@@ -3,8 +3,8 @@ import {
   RIGHT_LIMIT_WIDTH,
   RIGHT_LIMIT_X,
   RIGHT_LIMIT_Y,
-} from "../config";
-import { Bloque } from "../objects/Bloque";
+} from '../config';
+import { Bloque } from '../objects/Bloque';
 
 export class MapManager {
   constructor(scene) {
@@ -15,11 +15,11 @@ export class MapManager {
   }
 
   createMap() {
-    this.map = this.scene.make.tilemap({ key: "mapa" });
+    this.map = this.scene.make.tilemap({ key: 'mapa' });
   }
 
   createBlocks() {
-    this.blocks = new Bloque(this.scene, this.map, "tileSets", "solidos", {
+    this.blocks = new Bloque(this.scene, this.map, 'tileSets', 'solidos', {
       bloques: true,
     });
   }
@@ -31,7 +31,7 @@ export class MapManager {
       RIGHT_LIMIT_WIDTH,
       RIGHT_LIMIT_HEIGHT,
       0x000000,
-      0,
+      0
     );
     this.scene.physics.world.enable(this.rightLimit);
     this.rightLimit.body.setImmovable(true);
@@ -39,7 +39,7 @@ export class MapManager {
 
     this.scene.physics.add.collider(
       this.scene.playerManager.player,
-      this.rightLimit,
+      this.rightLimit
     );
     this.scene.enemyManager.enemies.children.iterate((enemy) => {
       this.scene.physics.add.collider(enemy, this.rightLimit);

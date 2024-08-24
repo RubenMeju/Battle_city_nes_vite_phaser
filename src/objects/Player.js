@@ -1,5 +1,5 @@
-import Phaser from "phaser";
-import { Bullet } from "./Bullet.js";
+import Phaser from 'phaser';
+import { Bullet } from './Bullet.js';
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, texture) {
@@ -16,7 +16,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.velocidad = 100;
     this.alive = true;
     this.isMoving = false;
-    this.lastDirection = "up";
+    this.lastDirection = 'up';
 
     // Configuración de balas
     this.bullets = scene.physics.add.group({
@@ -28,8 +28,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.lastShot = 0;
 
     // Configuración inicial de sonidos
-    this.walkSound = scene.sound.add("walk", { volume: 0.1, loop: false });
-    this.stopSound = scene.sound.add("stop", { volume: 0.1, loop: true });
+    this.walkSound = scene.sound.add('walk', { volume: 0.1, loop: false });
+    this.stopSound = scene.sound.add('stop', { volume: 0.1, loop: true });
   }
 
   update(cursors, spaceBar) {
@@ -41,20 +41,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.isMoving) {
       if (cursors.up.isDown) {
         velocityY = -this.velocidad;
-        this.lastDirection = "up";
-        this.playAnimation("up");
+        this.lastDirection = 'up';
+        this.playAnimation('up');
       } else if (cursors.down.isDown) {
         velocityY = this.velocidad;
-        this.lastDirection = "down";
-        this.playAnimation("down");
+        this.lastDirection = 'down';
+        this.playAnimation('down');
       } else if (cursors.left.isDown) {
         velocityX = -this.velocidad;
-        this.lastDirection = "left";
-        this.playAnimation("left");
+        this.lastDirection = 'left';
+        this.playAnimation('left');
       } else if (cursors.right.isDown) {
         velocityX = this.velocidad;
-        this.lastDirection = "right";
-        this.playAnimation("right");
+        this.lastDirection = 'right';
+        this.playAnimation('right');
       } else {
         this.stopAnimation();
       }
