@@ -97,4 +97,8 @@ export class GameScene extends Phaser.Scene {
     bullet.destroy();
     this.mapManager.getBlocks().destroyBlock(tile, bullet.direction);
   }
+
+  handleBulletEagleCollision() {
+    console.log('colision con el aguila');
+  }
 }

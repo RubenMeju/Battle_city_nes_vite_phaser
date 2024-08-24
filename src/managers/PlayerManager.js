@@ -33,6 +33,21 @@ export class PlayerManager {
       );
     }
 
+    // Obtener la referencia al águila
+    const eagle = this.scene.mapManager.getEagle();
+
+    // Asegúrate de que eagle no sea null
+    if (eagle) {
+      // Colisión entre las balas del jugador y el águila
+      this.scene.physics.add.collider(
+        this.player.bullets,
+        eagle,
+        this.scene.handleBulletEagleCollision,
+        null,
+        this.scene
+      );
+    }
+
     // Configuración inicial
     this.player.play('aparecer'); // Reproduce la animación de aparición
     this.scene.time.delayedCall(1500, () => {
