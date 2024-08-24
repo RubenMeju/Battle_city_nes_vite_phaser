@@ -5,12 +5,14 @@ import {
   RIGHT_LIMIT_Y,
 } from '../config';
 import { Bloque } from '../objects/Bloque';
+import { Eagle } from '../objects/Eagle';
 
 export class MapManager {
   constructor(scene) {
     this.scene = scene;
     this.map = null;
     this.blocks = null;
+    this.eagle = null;
     this.rightLimit = null;
   }
 
@@ -23,6 +25,13 @@ export class MapManager {
   createBlocks() {
     this.blocks = new Bloque(this.scene, this.map, 'tileSets', 'solidos', {
       bloques: true,
+    });
+  }
+
+  // Método para crear los objetivos
+  createGoals() {
+    this.eagle = new Eagle(this.scene, this.map, 'tileSets', 'aguila', {
+      destruible: true,
     });
   }
 
@@ -65,5 +74,10 @@ export class MapManager {
   // Método para exponer el límite derecho a otros componentes
   getRightLimit() {
     return this.rightLimit;
+  }
+
+  // Método para exponer el aguila
+  getEagle() {
+    return this.eagle;
   }
 }

@@ -46,6 +46,8 @@ export class GameScene extends Phaser.Scene {
 
     this.mapManager.createMap();
     this.mapManager.createBlocks();
+    this.mapManager.createGoals();
+
     this.playerManager = new PlayerManager(this);
     this.enemyManager = new EnemyManager(this);
     this.enemies = this.enemyManager.enemies;
