@@ -59,7 +59,7 @@ const animationsConfig = {
   destruccion: {
     texture: 'tiles',
     frames: { start: 216, end: 218 },
-    frameRate: 4,
+    frameRate: 7,
     repeat: 0,
   },
 };

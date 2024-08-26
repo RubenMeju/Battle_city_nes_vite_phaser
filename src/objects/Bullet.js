@@ -7,7 +7,6 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    // Crear un círculo como la bala
     this.graphics = scene.add.graphics();
     this.graphics.fillStyle(0xffffff, 1); // Color blanco
     this.graphics.fillCircle(0, 0, 5); // Radio de 5 píxeles
@@ -19,14 +18,16 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.body.setSize(10, 10);
     this.setCollideWorldBounds(true);
     this.body.onWorldBounds = true;
-    this.body.world.on('worldbounds', this.destroy, this);
+
+    // Asegurarse de que destroy() se llame con el contexto correcto
+    this.body.world.on('worldbounds', () => this.destroy(), this);
   }
 
   fire(x, y, direction) {
     this.setPosition(x, y);
     this.setActive(true);
     this.setVisible(true);
-    this.direction = direction; // Guarda la dirección del disparo
+    this.direction = direction;
 
     let velocity = 300;
     switch (direction) {
@@ -45,19 +46,19 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  update() {
-    if (
-      this.x < 0 ||
-      this.x > this.scene.scale.width ||
-      this.y < 0 ||
-      this.y > this.scene.scale.height
-    ) {
-      this.destroy();
-    }
-  }
+  update() {}
 
   destroy() {
-    super.destroy();
-    this.graphics.destroy();
+    console.log('DESTROY()');
+    this.setScale(3);
+
+    // Reproduce la animación antes de destruir
+    this.play('destruccion');
+
+    // Escucha el evento que indica que la animación ha terminado
+    this.once('animationcomplete-destruccion', () => {
+      console.log('animacion completada');
+      super.destroy();
+    });
   }
 }
