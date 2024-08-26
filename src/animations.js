@@ -1,29 +1,53 @@
+const playerTransform = {
+  tank1: {
+    up: { start: 0, end: 1 },
+    left: { start: 2, end: 3 },
+    down: { start: 4, end: 5 },
+    right: { start: 6, end: 7 },
+  },
+  tank2: {
+    up: { start: 25, end: 26 },
+    left: { start: 27, end: 28 },
+    down: { start: 29, end: 30 },
+    right: { start: 31, end: 32 },
+  },
+  // Puedes agregar más transformaciones aquí
+};
+
+function generateAnimationConfig(transformation) {
+  return {
+    [`${transformation}_up`]: {
+      texture: 'tiles',
+      frames: playerTransform[transformation].up,
+      frameRate: 10,
+      repeat: -1,
+    },
+    [`${transformation}_left`]: {
+      texture: 'tiles',
+      frames: playerTransform[transformation].left,
+      frameRate: 10,
+      repeat: -1,
+    },
+    [`${transformation}_right`]: {
+      texture: 'tiles',
+      frames: playerTransform[transformation].right,
+      frameRate: 10,
+      repeat: -1,
+    },
+    [`${transformation}_down`]: {
+      texture: 'tiles',
+      frames: playerTransform[transformation].down,
+      frameRate: 10,
+      repeat: -1,
+    },
+  };
+}
+
+// Configuración para todas las transformaciones posibles
 const animationsConfig = {
-  up: {
-    texture: 'tiles',
-    frames: { start: 0, end: 1 },
-    frameRate: 10,
-    repeat: -1,
-  },
-  left: {
-    texture: 'tiles',
-    frames: { start: 2, end: 3 },
-    frameRate: 10,
-    repeat: -1,
-  },
-  right: {
-    texture: 'tiles',
-    frames: { start: 6, end: 7 },
-    frameRate: 10,
-    repeat: -1,
-  },
-  down: {
-    texture: 'tiles',
-    frames: { start: 4, end: 5 },
-    frameRate: 10,
-    repeat: -1,
-  },
-  // Enemigos
+  ...generateAnimationConfig('tank1'),
+  ...generateAnimationConfig('tank2'),
+  // Agregar configuraciones adicionales aquí si tienes más transformaciones
   up_enemy: {
     texture: 'tiles',
     frames: { start: 8, end: 9 },
@@ -48,14 +72,12 @@ const animationsConfig = {
     frameRate: 10,
     repeat: -1,
   },
-  // Aparecer
   aparecer: {
     texture: 'tiles',
     frames: { start: 166, end: 169 },
     frameRate: 6,
     repeat: -1,
   },
-  // Destrucción
   destruccion: {
     texture: 'tiles',
     frames: { start: 216, end: 218 },
