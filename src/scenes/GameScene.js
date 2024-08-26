@@ -5,11 +5,13 @@ import { EnemyManager } from '../managers/EnemyManager.js';
 import { HudManager } from '../managers/HubManager.js';
 import { SoundManager } from '../managers/SoundManager.js';
 import { MapManager } from '../managers/MapManager.js';
+
 import {
   ENEMY_SPAWN_DELAY,
   INITIAL_ENEMY_COUNT,
   TILE_SIZE,
 } from '../config.js';
+import { PowerUp } from '../objects/PowerUp.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -53,6 +55,18 @@ export class GameScene extends Phaser.Scene {
     this.enemies = this.enemyManager.enemies;
 
     this.mapManager.createRightLimit();
+
+    // PowerUp
+    this.powerUp = new PowerUp(this, 220, 300, 'tiles', 194);
+    // Configurar la colisión entre el jugador y el power-up
+    this.physics.add.collider(
+      this.playerManager.player,
+      this.powerUp,
+      this.handlePowerUpCollision,
+      null,
+      this
+    );
+
     this.setupControls();
     this.setupEnemyTimer();
   }
@@ -118,5 +132,12 @@ export class GameScene extends Phaser.Scene {
   handleBulletEagleCollision(bullet, tile) {
     bullet.destroyBullet();
     this.mapManager.getEagle().destroyEagle(tile);
+  }
+
+  handlePowerUpCollision(player, item) {
+    console.log('has cogido el item', item);
+    item.destroy();
+
+    player.transformation = 'tank3';
   }
 }
