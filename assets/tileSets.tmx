@@ -189,86 +189,102 @@
   </tile>
   <tile id="876">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="877">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="878">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="879">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="976">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="977">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="978">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="979">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1076">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1077">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1078">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1079">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1176">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1177">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1178">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1179">
    <properties>
+    <property name="aguila" type="bool" value="true"/>
     <property name="destruible" type="bool" value="true"/>
    </properties>
   </tile>
  </tileset>
- <layer id="5" name="aguila" width="52" height="56">
+ <layer id="5" name="objetivo" width="52" height="56">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -322,10 +338,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,877,878,879,880,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,977,978,979,980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1077,1078,1079,1080,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1177,1178,1179,1180,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="3" name="solidos" width="52" height="56">

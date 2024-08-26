@@ -30,8 +30,8 @@ export class MapManager {
 
   // Método para crear los objetivos
   createGoals() {
-    this.eagle = new Eagle(this.scene, this.map, 'tileSets', 'aguila', {
-      eagle: true,
+    this.eagle = new Eagle(this.scene, this.map, 'tileSets', 'objetivo', {
+      aguila: true,
     });
   }
 
@@ -78,6 +78,6 @@ export class MapManager {
 
   // Método para obtener el layer de águila
   getEagle() {
-    return this.eagle.getLayer();
+    return this.eagle;
   }
 }

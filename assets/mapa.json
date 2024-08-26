@@ -61,7 +61,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1177, 1178, 1179, 1180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":56,
          "id":5,
-         "name":"aguila",
+         "name":"objetivo",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -541,6 +541,11 @@
                  "id":876,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -549,6 +554,11 @@
                 {
                  "id":877,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -559,6 +569,11 @@
                  "id":878,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -567,6 +582,11 @@
                 {
                  "id":879,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -577,6 +597,11 @@
                  "id":976,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -585,6 +610,11 @@
                 {
                  "id":977,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -595,6 +625,11 @@
                  "id":978,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -603,6 +638,11 @@
                 {
                  "id":979,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -613,6 +653,11 @@
                  "id":1076,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -621,6 +666,11 @@
                 {
                  "id":1077,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -631,6 +681,11 @@
                  "id":1078,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -639,6 +694,11 @@
                 {
                  "id":1079,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -649,6 +709,11 @@
                  "id":1176,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -657,6 +722,11 @@
                 {
                  "id":1177,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",
@@ -667,6 +737,11 @@
                  "id":1178,
                  "properties":[
                         {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"destruible",
                          "type":"bool",
                          "value":true
@@ -675,6 +750,11 @@
                 {
                  "id":1179,
                  "properties":[
+                        {
+                         "name":"aguila",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"destruible",
                          "type":"bool",

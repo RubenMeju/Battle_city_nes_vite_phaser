@@ -36,13 +36,15 @@ export class PlayerManager {
     // Obtener la referencia al águila
     const eagle = this.scene.mapManager.getEagle();
 
-    // Asegúrate de que eagle no sea null
-    if (eagle) {
-      // Colisión entre las balas del jugador y el águila
+    // Colisión entre el jugador y los bloques sólidos
+    if (eagle && eagle.objetivo) {
+      this.scene.physics.add.collider(this.player, eagle.objetivo);
+
+      // Colisión entre las balas del jugador y los bloques sólidos
       this.scene.physics.add.collider(
         this.player.bullets,
-        eagle,
-        this.scene.handleBulletEagleCollision,
+        eagle.objetivo,
+        this.scene.handleBulletEagleCollision.bind(this.scene),
         null,
         this.scene
       );
