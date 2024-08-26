@@ -12,11 +12,20 @@ export class PowerUp extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds(true); // El power-up no debe salir del mundo
     this.setImmovable(true);
     this.setOffset(0, 0); // Ajusta el offset si es necesario
+
+    // Configurar parpadeo
+    this.blinking = true; // Controlar el parpadeo
+    this.blinkSpeed = 500; // Tiempo en milisegundos entre parpadeos
+    this.timeEvent = scene.time.addEvent({
+      delay: this.blinkSpeed,
+      callback: this.blink,
+      callbackScope: this,
+      loop: true,
+    });
   }
 
-  // Método opcional para activar el power-up
-  activate(player) {
-    console.log('Power-up activated by player!');
-    this.destroy(); // Ejemplo: destruir el power-up al ser recogido
+  blink() {
+    // Alternar visibilidad entre visible e invisible
+    this.setVisible(!this.visible);
   }
 }
