@@ -29,7 +29,7 @@ export class MapManager {
   }
 
   // Método para crear los objetivos
-  createGoals() {
+  createEagle() {
     this.eagle = new Eagle(this.scene, this.map, 'tileSets', 'objetivo', {
       aguila: true,
     });

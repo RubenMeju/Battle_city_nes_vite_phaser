@@ -46,7 +46,7 @@ export class GameScene extends Phaser.Scene {
 
     this.mapManager.createMap();
     this.mapManager.createBlocks();
-    this.mapManager.createGoals();
+    this.mapManager.createEagle();
 
     this.playerManager = new PlayerManager(this);
     this.enemyManager = new EnemyManager(this);
@@ -105,7 +105,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   handleGameOver() {
-    if (this.lives <= 0) {
+    if (this.lives <= 0 || this.mapManager.eagle.eagleDestroyed) {
       this.scene.start('GameOverScene');
     }
   }
