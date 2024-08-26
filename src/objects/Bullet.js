@@ -19,7 +19,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     // Configura límites del mundo
     this.setCollideWorldBounds(true);
-    this.body.world.on('worldbounds', this.onWorldBounds, this);
+    this.body.world.on('worldbounds', this.destroyBullet, this);
   }
 
   fire(x, y, direction) {
@@ -45,17 +45,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  onWorldBounds() {
-    // Solo actúa si el objeto es una bala y no está destruido
-    if (this.active) {
-      this.setActive(false);
-      this.setVisible(false);
-      this.destroyBullet(); // Llama al destroy aquí para manejar la animación
-    }
-  }
-
   destroyBullet() {
-    console.log('DESTROY()');
     this.setScale(3);
 
     // Reproduce la animación antes de destruir
@@ -63,7 +53,6 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     // Escucha el evento que indica que la animación ha terminado
     this.once('animationcomplete-destruccion', () => {
-      console.log('animacion completada');
       super.destroy();
     });
   }
