@@ -11,7 +11,18 @@ const playerTransform = {
     down: { start: 29, end: 30 },
     right: { start: 31, end: 32 },
   },
-  // Puedes agregar más transformaciones aquí
+  tank3: {
+    up: { start: 50, end: 51 },
+    left: { start: 52, end: 53 },
+    down: { start: 54, end: 55 },
+    right: { start: 56, end: 57 },
+  },
+  tank4: {
+    up: { start: 75, end: 76 },
+    left: { start: 77, end: 78 },
+    down: { start: 79, end: 80 },
+    right: { start: 81, end: 82 },
+  },
 };
 
 function generateAnimationConfig(transformation) {
@@ -47,7 +58,9 @@ function generateAnimationConfig(transformation) {
 const animationsConfig = {
   ...generateAnimationConfig('tank1'),
   ...generateAnimationConfig('tank2'),
-  // Agregar configuraciones adicionales aquí si tienes más transformaciones
+  ...generateAnimationConfig('tank3'),
+  ...generateAnimationConfig('tank4'),
+
   up_enemy: {
     texture: 'tiles',
     frames: { start: 8, end: 9 },
