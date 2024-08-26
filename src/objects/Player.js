@@ -27,7 +27,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.maxBullets = 1;
     this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
     this.lastShot = 0;
 
@@ -35,13 +34,29 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.walkSound = scene.sound.add('walk', { volume: 0.1, loop: false });
     this.stopSound = scene.sound.add('stop', { volume: 0.1, loop: true });
 
+    // Definir el comportamiento de las balas para cada transformación
+    this.bulletBehaviors = {
+      tank1: {
+        maxBullets: 1,
+        fireInterval: 0, // Sin intervalo adicional, solo una bala a la vez
+      },
+      tank2: {
+        maxBullets: 2,
+        fireInterval: 1000, // 1 segundo de intervalo entre disparos
+      },
+      tank3: {
+        maxBullets: 3,
+        fireInterval: 500, // 500 ms de intervalo entre disparos
+      },
+    };
+
     // Iniciar la animación de "aparecer" y configurar el tiempo de finalización
     this.startAppearAnimation();
   }
 
   update(cursors, spaceBar) {
     if (this.isAppearing) {
-      // No permitas que se ejecuten otras animaciones o acciones mientras aparece
+      // No permite que se ejecuten otras animaciones o acciones mientras aparece
       if (this.scene.time.now > this.appearEndTime) {
         this.isAppearing = false;
         this.playAnimation('up'); // Cambia a la animación de movimiento hacia arriba
@@ -90,21 +105,33 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Manejo de disparos
-    if (
-      spaceBar.isDown &&
-      this.scene.time.now > this.lastShot + this.bulletCooldown
-    ) {
-      this.shoot();
-      this.lastShot = this.scene.time.now;
+    if (spaceBar.isDown) {
+      const bulletBehavior = this.bulletBehaviors[this.transformation];
+      if (bulletBehavior) {
+        // Permitir disparar balas según el comportamiento de la transformación
+        if (this.scene.time.now > this.lastShot + bulletBehavior.fireInterval) {
+          this.shoot();
+          this.lastShot = this.scene.time.now; // Actualiza el último tiempo de disparo
+        }
+      }
     }
   }
 
   shoot() {
-    if (this.bullets.getLength() < this.maxBullets) {
-      const bullet = this.bullets.get(this.x, this.y);
-      if (bullet) {
-        bullet.fire(this.x, this.y, this.lastDirection);
+    const bulletBehavior = this.bulletBehaviors[this.transformation];
+    if (bulletBehavior) {
+      // Comprobar cuántas balas se pueden disparar
+      if (this.bullets.getLength() < bulletBehavior.maxBullets) {
+        // Disparar una bala y manejar el intervalo de disparo
+        const bullet = this.bullets.get(this.x, this.y);
+        if (bullet) {
+          bullet.fire(this.x, this.y, this.lastDirection);
+        }
       }
+    } else {
+      console.error(
+        `No bullet behavior defined for transformation: ${this.transformation}`
+      );
     }
   }
 
@@ -142,5 +169,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   // Método para cambiar la transformación
   setTransformation(newTransformation) {
     this.transformation = newTransformation;
+    const bulletBehavior = this.bulletBehaviors[newTransformation];
+    if (bulletBehavior) {
+      this.maxBullets = bulletBehavior.maxBullets;
+      this.bulletCooldown = bulletBehavior.fireInterval; // Configura el intervalo de disparo
+    } else {
+      // Maneja el caso donde no hay comportamiento definido para la transformación
+      console.warn(
+        `Bullet behavior not defined for transformation: ${newTransformation}`
+      );
+      this.maxBullets = 1; // Valor predeterminado si no se encuentra el comportamiento
+    }
   }
 }
