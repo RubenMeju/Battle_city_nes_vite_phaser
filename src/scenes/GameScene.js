@@ -94,7 +94,7 @@ export class GameScene extends Phaser.Scene {
         bullet.y < 0 ||
         bullet.y > this.game.config.height ||
         bullet.x < 0 ||
-        bullet.x > this.game.config.width
+        bullet.x > 625
       ) {
         // Solo destruye la bala si está activa
         if (bullet.active) {
