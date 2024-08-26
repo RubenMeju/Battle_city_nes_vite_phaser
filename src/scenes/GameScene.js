@@ -75,9 +75,11 @@ export class GameScene extends Phaser.Scene {
 
   update(time, delta) {
     this.handleGameOver();
+
     if (this.playerManager.player.alive) {
       this.playerManager.update(this.cursors, this.spaceBar);
     }
+
     this.enemyManager.update(time, delta);
     this.hudManager.updateLives(this.lives);
     this.hudManager.updateEnemies(
@@ -85,6 +87,23 @@ export class GameScene extends Phaser.Scene {
         this.enemyManager.enemiesCreated +
         this.enemyManager.enemiesRemaining
     );
+
+    // Manejo de balas
+    this.playerManager.player.bullets.getChildren().forEach((bullet) => {
+      if (
+        bullet.y < 0 ||
+        bullet.y > this.game.config.height ||
+        bullet.x < 0 ||
+        bullet.x > this.game.config.width
+      ) {
+        // Solo destruye la bala si está activa
+        if (bullet.active) {
+          bullet.setActive(false);
+          bullet.setVisible(false);
+          bullet.destroy();
+        }
+      }
+    });
   }
 
   handleGameOver() {
@@ -94,12 +113,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   handleBulletBlockCollision(bullet, tile) {
-    bullet.destroy();
+    bullet.destroyBullet();
     this.mapManager.getBlocks().destroyBlock(tile, bullet.direction);
   }
 
   handleBulletEagleCollision(bullet, tile) {
-    bullet.destroy();
+    bullet.destroyBullet();
     this.mapManager.getEagle().destroyEagle(tile);
   }
 }
