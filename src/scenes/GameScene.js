@@ -6,12 +6,12 @@ import {
   INITIAL_ENEMY_COUNT,
   TILE_SIZE,
 } from '../config.js';
-import { PowerUp } from '../objects/PowerUp.js';
 import { MapController } from '../controllers/MapController.js';
 import { PlayerController } from '../controllers/PlayerController.js';
 import { HudController } from '../controllers/HubController.js';
 import { SoundController } from '../controllers/SoundController.js';
 import { EnemyController } from '../controllers/EnemyController.js';
+import { PowerUpController } from '../controllers/PowerUpController.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -57,6 +57,9 @@ export class GameScene extends Phaser.Scene {
     this.mapController.createRightLimit();
 
     // PowerUp
+    // Inicializar PowerUpController
+    this.powerUpController = new PowerUpController(this);
+    /*
     this.powerUp = new PowerUp(this, 220, 300, 'tiles', 194);
     // Configurar la colisión entre el jugador y el power-up
     this.physics.add.collider(
@@ -66,7 +69,7 @@ export class GameScene extends Phaser.Scene {
       null,
       this
     );
-
+*/
     this.setupControls();
     this.setupEnemyTimer();
   }
@@ -116,6 +119,9 @@ export class GameScene extends Phaser.Scene {
         }
       }
     });
+
+    //Actualizar los powerUps
+    this.powerUpController.update();
   }
 
   handleGameOver() {
@@ -132,12 +138,5 @@ export class GameScene extends Phaser.Scene {
   handleBulletEagleCollision(bullet, tile) {
     bullet.destroyBullet();
     this.mapController.getEagle().destroyEagle(tile);
-  }
-
-  handlePowerUpCollision(player, item) {
-    console.log('has cogido el item', item);
-    item.destroy();
-
-    player.transformation = 'tank3';
   }
 }
