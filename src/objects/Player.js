@@ -60,15 +60,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Iniciar la animación de "aparecer" y configurar el tiempo de finalización
     this.startAppearAnimation();
-  }
 
-  // Método para incrementar la transformación
-  upgradeTransformation() {
-    if (this.currentTransformationIndex < this.transformations.length - 1) {
-      this.currentTransformationIndex++;
-      this.transformation =
-        this.transformations[this.currentTransformationIndex];
-    }
+    // Agregar propiedades relacionadas con los Power-Ups
+    this.invulnerable = false;
+    this.freezeDuration = 0; // Para manejar la duración del congelamiento de enemigos
   }
 
   update(cursors, spaceBar) {
@@ -197,5 +192,60 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       );
       this.maxBullets = 1; // Valor predeterminado si no se encuentra el comportamiento
     }
+  }
+
+  // POWER UPS
+  // Método para incrementar la transformación(EStrella)
+  upgradeTransformation() {
+    if (this.currentTransformationIndex < this.transformations.length - 1) {
+      this.currentTransformationIndex++;
+      this.transformation =
+        this.transformations[this.currentTransformationIndex];
+    }
+  }
+
+  // Power-Up: Hacer al jugador invulnerable (Casco)
+  activateInvulnerability(duration = 5000) {
+    console.log('jugador invulnerable');
+    this.invulnerable = true;
+    this.setTint(0xffd700); // Cambiar color a dorado para indicar invulnerabilidad
+    this.scene.time.delayedCall(duration, () => {
+      this.invulnerable = false;
+      this.clearTint(); // Restaurar color original
+    });
+  }
+
+  // Power-Up: Destruir todos los enemigos en pantalla (Granada)
+  destroyAllEnemies() {
+    console.log('destruir a todos los enemigos');
+    this.scene.enemies.getChildren().forEach((enemy) => {
+      enemy.destroy();
+    });
+  }
+
+  // Power-Up: Congelar a todos los enemigos (Reloj)
+  freezeEnemies(duration = 5000) {
+    console.log('detener a los enemigos durante 5 segundos');
+    this.scene.enemies.getChildren().forEach((enemy) => {
+      enemy.body.moves = false; // Detener movimiento
+    });
+
+    // Después de la duración, descongelar a los enemigos
+    this.scene.time.delayedCall(duration, () => {
+      this.scene.enemies.getChildren().forEach((enemy) => {
+        enemy.body.moves = true;
+      });
+    });
+  }
+
+  // Power-Up: Vidas extra (Vida)
+  gainExtraLife() {
+    console.log('Has conseguido una vida');
+    this.scene.lives++;
+  }
+
+  // Power-Up: Mejorar las defensas del Águila (Pala)
+  fortifyEagle() {
+    console.log('mejorar las defensas del aguila');
   }
 }

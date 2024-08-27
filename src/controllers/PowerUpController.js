@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { PowerUp } from '../objects/PowerUp';
-import { powerUpEffects } from '../powerUpEffects';
 
 export class PowerUpController {
   constructor(scene) {
@@ -28,7 +27,7 @@ export class PowerUpController {
     const y = Phaser.Math.Between(50, this.scene.scale.height - 50);
 
     const texture = 'tiles';
-    const frame = Phaser.Math.Between(191, 197);
+    const frame = Phaser.Math.Between(191, 196);
 
     // Crear el power-up y añadirlo al grupo
     const powerUp = new PowerUp(this.scene, x, y, texture, frame);
@@ -45,21 +44,34 @@ export class PowerUpController {
   }
 
   handlePowerUpCollision(player, powerUp) {
-    // Obtener el frame del power-up
-    const frame = powerUp.frame.name;
+    powerUp.destroy(); // Destruir el Power-Up cuando se recoja
 
-    // Verificar si hay un efecto asociado a este frame y aplicarlo
-    if (powerUpEffects[frame]) {
-      powerUpEffects[frame](player);
-    } else {
-      console.log('No effect found for this power-up.');
+    // Efectos según el tipo de Power-Up recogido
+    switch (powerUp.frame.name) {
+      case 191: // Casco
+        player.activateInvulnerability(10000); // 10 segundos de invulnerabilidad
+        break;
+      case 192: //  Reloj
+        player.freezeEnemies(5000); // Congelar enemigos por 5 segundos
+        break;
+      case 193: // Pala
+        player.fortifyEagle();
+        break;
+      case 194: // Estrella
+        player.upgradeTransformation();
+        break;
+      case 195: // Granada
+        player.destroyAllEnemies();
+        break;
+      case 196: // Vida extra
+        player.gainExtraLife();
+        break;
+      default:
+        console.warn(
+          `No action defined for Power-Up with frame: ${powerUp.frame.name}`
+        );
+        break;
     }
-
-    // Destruir el power-up cuando se recoja
-    powerUp.destroy();
-
-    // Incrementar la transformación del jugador
-    player.upgradeTransformation();
   }
 
   update() {

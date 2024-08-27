@@ -36,9 +36,4 @@ export const powerUpEffects = {
     player.addLife();
     console.log('Player gained an extra life with a Tank!');
   },
-  197: (player) => {
-    // Efecto del Hacha: Transforma las defensas de la base
-    player.scene.modifyBaseDefenses();
-    console.log('Base defenses modified with a Hatchet!');
-  },
 };
