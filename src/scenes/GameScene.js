@@ -38,6 +38,7 @@ export class GameScene extends Phaser.Scene {
     this.load.audio('walk', 'assets/sounds/walk.wav');
     this.load.audio('powerup', 'assets/sounds/coger_power_up.wav');
     this.load.audio('bala_bloque', 'assets/sounds/bala_bloque.wav');
+    this.load.audio('bala_bordes', 'assets/sounds/bala_bordes.wav');
   }
 
   create() {
@@ -107,6 +108,7 @@ export class GameScene extends Phaser.Scene {
       ) {
         // Solo destruye la bala si está activa
         if (bullet.active) {
+          this.soundController.playBalaBorde();
           bullet.destroy();
         }
       }
