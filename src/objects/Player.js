@@ -173,7 +173,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   activateInvulnerability(duration = 8000) {
     this.invulnerable = true;
-    this.setTint(0xffd700); // Cambiar color a dorado para indicar invulnerabilidad
+    this.setTint(0xff0000); // Cambiar color a rojo para indicar invulnerabilidad
     this.scene.time.delayedCall(duration, () => {
       this.invulnerable = false;
       this.clearTint();
