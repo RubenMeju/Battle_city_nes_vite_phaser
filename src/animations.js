@@ -101,12 +101,15 @@ const animationsConfig = {
 
 export function createAnimations(scene) {
   Object.entries(animationsConfig).forEach(([key, config]) => {
-    scene.anims.create({
-      key,
-      frames: scene.anims.generateFrameNumbers(config.texture, config.frames),
-      frameRate: config.frameRate,
-      repeat: config.repeat,
-    });
+    // Verifica si la animación ya existe antes de crearla
+    if (!scene.anims.exists(key)) {
+      scene.anims.create({
+        key,
+        frames: scene.anims.generateFrameNumbers(config.texture, config.frames),
+        frameRate: config.frameRate,
+        repeat: config.repeat,
+      });
+    }
   });
 }
 

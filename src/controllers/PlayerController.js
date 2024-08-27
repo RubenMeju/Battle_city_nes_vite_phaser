@@ -55,7 +55,6 @@ export class PlayerController {
     this.scene.time.delayedCall(1500, () => {
       if (this.player.active) {
         this.player.isMoving = true;
-        this.player.play('up'); // Cambia a la animación normal después de 1.5 segundos
       }
     });
   }
@@ -79,7 +78,6 @@ export class PlayerController {
       this.scene.time.delayedCall(1500, () => {
         if (this.player.active) {
           this.player.isMoving = true;
-          this.player.play('up'); // Cambia a la animación normal después de 1.5 segundos
         }
       });
     }

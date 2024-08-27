@@ -20,7 +20,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.appearEndTime = 0; // Tiempo cuando la animación de aparecer debe terminar
 
     // Transformación inicial
-    this.transformation = 'tank2';
+    this.transformation = 'tank1';
 
     // Configuración de balas
     this.bullets = scene.physics.add.group({
