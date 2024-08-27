@@ -47,4 +47,15 @@ export class SoundController {
   playVida() {
     this.vidaSound.play({ volume: 0.5, loop: false });
   }
+
+  // Nuevo método para detener todos los sonidos
+  stopAllSounds() {
+    if (this.walkSound.isPlaying) this.walkSound.stop();
+    if (this.stopSound.isPlaying) this.stopSound.stop();
+    if (this.explosionSound.isPlaying) this.explosionSound.stop();
+    if (this.powerUpSound.isPlaying) this.powerUpSound.stop();
+    if (this.balaBloqueSound.isPlaying) this.balaBloqueSound.stop();
+    if (this.balaBordesSound.isPlaying) this.balaBordesSound.stop();
+    if (this.vidaSound.isPlaying) this.vidaSound.stop();
+  }
 }

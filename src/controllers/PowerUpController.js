@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { PowerUp } from '../objects/PowerUp';
+import { RIGHT_LIMIT_X } from '../config';
 
 export class PowerUpController {
   constructor(scene) {
@@ -22,7 +23,7 @@ export class PowerUpController {
     }
 
     // Generar coordenadas aleatorias dentro de los límites del mundo
-    const x = Phaser.Math.Between(50, this.scene.scale.width - 50);
+    const x = Phaser.Math.Between(50, RIGHT_LIMIT_X - 50);
     const y = Phaser.Math.Between(50, this.scene.scale.height - 50);
 
     const texture = 'tiles';

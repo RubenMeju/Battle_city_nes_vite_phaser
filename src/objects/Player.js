@@ -84,11 +84,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityX(velocityX);
     this.setVelocityY(velocityY);
 
-    if (this.isMoving) {
-      this.scene.soundController.playWalk();
-    } else {
-      this.scene.soundController.stopWalkSound(); // Detiene el sonido de caminar
-      this.scene.soundController.stopWalk(); // Reproduce el sonido de detenerse
+    if (!this.scene.isGameOver) {
+      if (this.isMoving) {
+        this.scene.soundController.playWalk();
+      } else {
+        this.scene.soundController.stopWalkSound(); // Detiene el sonido de caminar
+        this.scene.soundController.stopWalk(); // Reproduce el sonido de detenerse
+      }
     }
 
     if (spaceBar.isDown) {

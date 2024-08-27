@@ -19,6 +19,7 @@ export class GameScene extends Phaser.Scene {
     this.escalado = 3;
     this.maxBombas = 3;
     this.totalEnemies = INITIAL_ENEMY_COUNT;
+    this.isGameOver = false;
   }
   init(data) {
     this.lives = data.lives || 1;
@@ -138,6 +139,10 @@ export class GameScene extends Phaser.Scene {
 
   handleGameOver() {
     if (this.lives <= 0 || this.mapController.eagle.eagleDestroyed) {
+      console.log('Game Over: Deteniendo todos los sonidos');
+      this.isGameOver = true;
+      this.soundController.stopAllSounds();
+
       this.scene.start('GameOverScene');
     }
   }
