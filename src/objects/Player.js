@@ -31,10 +31,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
     this.lastShot = 0;
 
-    // Configuración inicial de sonidos
-    this.walkSound = scene.sound.add('walk', { volume: 0.1, loop: false });
-    this.stopSound = scene.sound.add('stop', { volume: 0.1, loop: true });
-
     // Definir el comportamiento de las balas para cada transformación
     this.bulletBehaviors = {
       tank1: { maxBullets: 1, fireInterval: 0 },
@@ -89,14 +85,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityY(velocityY);
 
     if (this.isMoving) {
-      if (!this.walkSound.isPlaying) {
-        this.walkSound.play();
-      }
+      this.scene.soundController.playWalk();
     } else {
-      if (this.walkSound.isPlaying) {
-        this.walkSound.stop();
-        this.stopSound.play();
-      }
+      this.scene.soundController.stopWalk();
     }
 
     if (spaceBar.isDown) {
@@ -136,7 +127,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   stopAnimation() {
     if (this.anims.isPlaying) {
       this.anims.stop();
-      this.stopSound.play();
+      this.scene.soundController.stopWalk();
     }
   }
 

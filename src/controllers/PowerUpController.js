@@ -6,7 +6,6 @@ export class PowerUpController {
     this.scene = scene;
     this.powerUps = this.scene.physics.add.group(); // Un grupo para manejar los power-ups
     this.spawnInterval = 5000; // Intervalo de aparición en milisegundos (5 segundos)
-
     // Programar la aparición del primer power-up
     this.scene.time.addEvent({
       delay: this.spawnInterval,
@@ -44,6 +43,8 @@ export class PowerUpController {
   }
 
   handlePowerUpCollision(player, powerUp) {
+    this.soundController.playPowerUp();
+
     powerUp.destroy(); // Destruir el Power-Up cuando se recoja
 
     // Efectos según el tipo de Power-Up recogido
@@ -74,7 +75,5 @@ export class PowerUpController {
     }
   }
 
-  update() {
-    // Si necesitas actualizar algo en cada frame
-  }
+  update() {}
 }

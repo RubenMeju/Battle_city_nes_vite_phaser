@@ -7,12 +7,22 @@ export class SoundController {
   }
 
   initSounds() {
-    this.explosionSound = this.scene.sound.add('explosion');
-    this.stopSound = this.scene.sound.add('stop');
     this.walkSound = this.scene.sound.add('walk');
+    this.stopSound = this.scene.sound.add('stop');
+    this.explosionSound = this.scene.sound.add('explosion');
+    this.powerUpSound = this.scene.sound.add('powerup');
   }
 
+  playWalk() {
+    this.walkSound.play({ volume: 0.5, loop: true }); // Reproduce en bucle
+  }
+  stopWalk() {
+    this.stopSound.play({ volume: 0.5, loop: true }); // Reproduce en bucle
+  }
   playExplosion() {
     this.explosionSound.play({ volume: EXPLOSION_VOLUME, loop: false });
+  }
+  playPowerUp() {
+    this.powerUpSound.play({ volume: 1, loop: false });
   }
 }

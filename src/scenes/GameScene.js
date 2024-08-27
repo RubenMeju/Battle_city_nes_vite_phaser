@@ -36,13 +36,15 @@ export class GameScene extends Phaser.Scene {
     this.load.audio('explosion', 'assets/sounds/explosion.wav');
     this.load.audio('stop', 'assets/sounds/stop.wav');
     this.load.audio('walk', 'assets/sounds/walk.wav');
+    this.load.audio('powerup', 'assets/sounds/coger_power_up.wav');
   }
 
   create() {
-    this.soundController = new SoundController(this);
     if (!this.anims.get('up')) {
       createAnimations(this);
     }
+    this.soundController = new SoundController(this);
+
     this.hudController = new HudController(this);
     this.mapController = new MapController(this); // Crea una instancia de mapController
 
@@ -57,19 +59,8 @@ export class GameScene extends Phaser.Scene {
     this.mapController.createRightLimit();
 
     // PowerUp
-    // Inicializar PowerUpController
     this.powerUpController = new PowerUpController(this);
-    /*
-    this.powerUp = new PowerUp(this, 220, 300, 'tiles', 194);
-    // Configurar la colisión entre el jugador y el power-up
-    this.physics.add.collider(
-      this.playerController.player,
-      this.powerUp,
-      this.handlePowerUpCollision,
-      null,
-      this
-    );
-*/
+
     this.setupControls();
     this.setupEnemyTimer();
   }
