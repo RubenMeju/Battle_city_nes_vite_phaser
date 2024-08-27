@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { PowerUp } from '../objects/PowerUp';
+import { powerUpEffects } from '../powerUpEffects';
 
 export class PowerUpController {
   constructor(scene) {
@@ -26,9 +27,8 @@ export class PowerUpController {
     const x = Phaser.Math.Between(50, this.scene.scale.width - 50);
     const y = Phaser.Math.Between(50, this.scene.scale.height - 50);
 
-    // Seleccionar aleatoriamente un tipo de power-up (en este ejemplo, solo hay uno)
     const texture = 'tiles';
-    const frame = 194; // Aquí podrías tener una lógica para seleccionar diferentes power-ups
+    const frame = Phaser.Math.Between(191, 197);
 
     // Crear el power-up y añadirlo al grupo
     const powerUp = new PowerUp(this.scene, x, y, texture, frame);
@@ -45,8 +45,18 @@ export class PowerUpController {
   }
 
   handlePowerUpCollision(player, powerUp) {
-    // Aquí puedes manejar la lógica cuando el jugador recoge el power-up
-    powerUp.destroy(); // Destruir el power-up cuando se recoja
+    // Obtener el frame del power-up
+    const frame = powerUp.frame.name;
+
+    // Verificar si hay un efecto asociado a este frame y aplicarlo
+    if (powerUpEffects[frame]) {
+      powerUpEffects[frame](player);
+    } else {
+      console.log('No effect found for this power-up.');
+    }
+
+    // Destruir el power-up cuando se recoja
+    powerUp.destroy();
 
     // Incrementar la transformación del jugador
     player.upgradeTransformation();
