@@ -71,7 +71,7 @@ export class PlayerController {
 
       // Iniciar la animación de "aparecer"
       this.player.startAppearAnimation();
-
+      this.player.activateInvulnerability(5000);
       this.scene.time.delayedCall(1500, () => {
         if (this.player.active) {
           this.player.isMoving = true;
