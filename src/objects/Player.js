@@ -179,7 +179,28 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   destroyAllEnemies() {
-    this.scene.enemies.getChildren().forEach((enemy) => enemy.destroy());
+    const enemies = this.scene.enemies.getChildren();
+
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const enemy = enemies[i];
+      if (enemy.active && this.isEnemyVisible(enemy)) {
+        enemy.destroy();
+        this.scene.enemyController.enemiesRemaining--; // Actualiza el contador de enemigos
+      }
+    }
+  }
+
+  // Método auxiliar para comprobar si un enemigo está visible en pantalla
+  isEnemyVisible(enemy) {
+    const camera = this.scene.cameras.main;
+    const enemyBounds = enemy.getBounds();
+
+    return (
+      enemyBounds.right > camera.worldView.left &&
+      enemyBounds.left < camera.worldView.right &&
+      enemyBounds.bottom > camera.worldView.top &&
+      enemyBounds.top < camera.worldView.bottom
+    );
   }
 
   freezeEnemies(duration = 5000) {

@@ -10,37 +10,34 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.setScale(this.scene.escalado);
     this.body.setSize(15, 15);
-    this.body.setOffset(0, 0); // Ajusta el offset para centrar el cuerpo de colisión
+    this.body.setOffset(0, 0);
 
     this.setCollideWorldBounds(true);
-    // Configuración inicial
+
     this.velocidad = 100;
     this.alive = true;
-    this.direction = 'right'; // Dirección inicial
-    this.moveTime = 2000; // Tiempo en milisegundos antes de cambiar de dirección
-    this.lastMoveTime = 0; // Tiempo del último cambio de dirección
-    this.appearTime = 1500; // Tiempo en milisegundos para la animación de aparición
-    this.isMoving = false; // Controla si el enemigo está en movimiento
+    this.direction = 'right';
+    this.moveTime = 2000;
+    this.lastMoveTime = 0;
+    this.appearTime = 1500;
+    this.isMoving = false;
 
-    // Configuración de las balas
     this.bullets = this.scene.physics.add.group({
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.maxBullets = 1; // Número máximo de balas simultáneas
-    this.bulletCooldown = 300; // Tiempo en milisegundos entre disparos
-    this.lastShot = 0; // Tiempo del último disparo
+    this.maxBullets = 1;
+    this.bulletCooldown = 300;
+    this.lastShot = 0;
 
-    // Inicializa la dirección aleatoriamente
     this.setRandomDirection();
 
-    // Inicializa la animación de aparición
     this.play('aparecer');
     this.scene.time.delayedCall(this.appearTime, () => {
       if (this.active) {
-        this.play('down_enemy'); // Cambia a la animación normal después de la animación de aparición
-        this.isMoving = true; // Permite el movimiento después de la animación
-        this.lastMoveTime = this.scene.time.now; // Inicializa el tiempo de movimiento después de la animación
+        this.play('down_enemy');
+        this.isMoving = true;
+        this.lastMoveTime = this.scene.time.now;
       }
     });
   }
@@ -48,7 +45,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   setRandomDirection() {
     const directions = ['up', 'down', 'left', 'right'];
     this.direction = directions[Phaser.Math.Between(0, directions.length - 1)];
-    this.lastDirection = this.direction;
   }
 
   update(time) {
@@ -58,40 +54,33 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   movement(time) {
-    // Cambio de dirección después de un intervalo de tiempo o al colisionar
     if (time - this.lastMoveTime > this.moveTime || this.isColliding()) {
       this.setRandomDirection();
       this.lastMoveTime = time;
       this.shoot();
     }
 
-    // Mover al enemigo en la dirección actual
     this.updateMovement();
   }
 
   updateMovement() {
-    switch (this.direction) {
-      case 'up':
-        this.setVelocityY(-this.velocidad);
-        this.setVelocityX(0);
-        this.anims.play('up_enemy', true);
-        break;
-      case 'down':
-        this.setVelocityY(this.velocidad);
-        this.setVelocityX(0);
-        this.anims.play('down_enemy', true);
-        break;
-      case 'left':
-        this.setVelocityX(-this.velocidad);
-        this.setVelocityY(0);
-        this.anims.play('left_enemy', true);
-        break;
-      case 'right':
-        this.setVelocityX(this.velocidad);
-        this.setVelocityY(0);
-        this.anims.play('right_enemy', true);
-        break;
-    }
+    const velocities = {
+      up: { x: 0, y: -this.velocidad },
+      down: { x: 0, y: this.velocidad },
+      left: { x: -this.velocidad, y: 0 },
+      right: { x: this.velocidad, y: 0 },
+    };
+
+    const anims = {
+      up: 'up_enemy',
+      down: 'down_enemy',
+      left: 'left_enemy',
+      right: 'right_enemy',
+    };
+
+    const { x, y } = velocities[this.direction];
+    this.setVelocity(x, y);
+    this.anims.play(anims[this.direction], true);
   }
 
   isColliding() {
@@ -107,7 +96,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.bullets.getChildren().length < this.maxBullets) {
       const bullet = this.bullets.get(this.x, this.y);
       if (bullet) {
-        bullet.fire(this.x, this.y, this.lastDirection);
+        bullet.fire(this.x, this.y, this.direction);
       }
     }
   }
