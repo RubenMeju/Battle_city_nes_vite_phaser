@@ -13,6 +13,7 @@ export class SoundController {
     this.powerUpSound = this.scene.sound.add('powerup');
     this.balaBloqueSound = this.scene.sound.add('bala_bloque');
     this.balaBordesSound = this.scene.sound.add('bala_bordes');
+    this.vidaSound = this.scene.sound.add('vida');
   }
 
   playWalk() {
@@ -25,12 +26,15 @@ export class SoundController {
     this.explosionSound.play({ volume: EXPLOSION_VOLUME, loop: false });
   }
   playPowerUp() {
-    this.powerUpSound.play({ volume: 1, loop: false });
+    this.powerUpSound.play({ volume: 0.5, loop: false });
   }
   playBalaBloque() {
-    this.balaBloqueSound.play({ volume: 1, loop: false });
+    this.balaBloqueSound.play({ volume: 0.5, loop: false });
   }
   playBalaBorde() {
-    this.balaBordesSound.play({ volume: 1, loop: false });
+    this.balaBordesSound.play({ volume: 0.5, loop: false });
+  }
+  playVida() {
+    this.vidaSound.play({ volume: 0.5, loop: false });
   }
 }

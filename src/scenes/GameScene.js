@@ -39,6 +39,7 @@ export class GameScene extends Phaser.Scene {
     this.load.audio('powerup', 'assets/sounds/coger_power_up.wav');
     this.load.audio('bala_bloque', 'assets/sounds/bala_bloque.wav');
     this.load.audio('bala_bordes', 'assets/sounds/bala_bordes.wav');
+    this.load.audio('vida', 'assets/sounds/vida.wav');
   }
 
   create() {

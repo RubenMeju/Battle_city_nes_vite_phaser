@@ -194,6 +194,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   gainExtraLife() {
+    this.scene.soundController.playVida();
     this.scene.lives++;
   }
 
