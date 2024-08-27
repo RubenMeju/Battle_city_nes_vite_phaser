@@ -93,9 +93,10 @@ export class EnemyController {
   }
 
   balaEnemigoImpactaEnElJugador(player, bullet) {
-    if (player && bullet) {
+    bullet.destroy();
+
+    if (!player.invulnerable) {
       player.alive = false;
-      bullet.destroy();
       player.setVelocity(0);
 
       // Accedemos a soundController desde la escena
