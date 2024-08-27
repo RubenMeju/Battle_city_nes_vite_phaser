@@ -47,7 +47,9 @@ export class PowerUpController {
   handlePowerUpCollision(player, powerUp) {
     // Aquí puedes manejar la lógica cuando el jugador recoge el power-up
     powerUp.destroy(); // Destruir el power-up cuando se recoja
-    player.transformation = 'tank3';
+
+    // Incrementar la transformación del jugador
+    player.upgradeTransformation();
   }
 
   update() {

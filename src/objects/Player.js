@@ -19,8 +19,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.isAppearing = true; // Inicialmente está en la animación de aparecer
     this.appearEndTime = 0; // Tiempo cuando la animación de aparecer debe terminar
 
-    // Transformación inicial
-    this.transformation = 'tank1';
+    // Transformaciones posibles
+    this.transformations = ['tank1', 'tank2', 'tank3', 'tank4'];
+
+    // Iniciar en la primera transformación (tank1)
+    this.currentTransformationIndex = 0;
+    this.transformation = this.transformations[this.currentTransformationIndex];
 
     // Configuración de balas
     this.bullets = scene.physics.add.group({
@@ -48,10 +52,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         maxBullets: 3,
         fireInterval: 500, // 500 ms de intervalo entre disparos
       },
+      tank4: {
+        maxBullets: 4,
+        fireInterval: 250, // 500 ms de intervalo entre disparos
+      },
     };
 
     // Iniciar la animación de "aparecer" y configurar el tiempo de finalización
     this.startAppearAnimation();
+  }
+
+  // Método para incrementar la transformación
+  upgradeTransformation() {
+    if (this.currentTransformationIndex < this.transformations.length - 1) {
+      this.currentTransformationIndex++;
+      this.transformation =
+        this.transformations[this.currentTransformationIndex];
+    }
   }
 
   update(cursors, spaceBar) {
@@ -129,7 +146,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         }
       }
     } else {
-      console.error(
+      console.log(
         `No bullet behavior defined for transformation: ${this.transformation}`
       );
     }
