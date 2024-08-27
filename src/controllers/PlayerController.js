@@ -68,11 +68,14 @@ export class PlayerController {
         .setPosition(this.initialPosition.x, this.initialPosition.y)
         .setVelocity(0);
       this.player.alive = true;
-      this.player.play('aparecer'); // Reproduce la animación de aparición al reaparecer
+
+      // Iniciar la animación de "aparecer"
+      this.player.startAppearAnimation();
 
       this.scene.time.delayedCall(1500, () => {
         if (this.player.active) {
           this.player.isMoving = true;
+          this.player.play('tank1_up');
         }
       });
     }

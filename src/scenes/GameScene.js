@@ -22,7 +22,7 @@ export class GameScene extends Phaser.Scene {
     this.isGameOver = false;
   }
   init(data) {
-    this.lives = data.lives || 1;
+    this.lives = data.lives || 3;
   }
   preload() {
     this.load.spritesheet('tiles', 'assets/sprites1.png', {
