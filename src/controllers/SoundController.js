@@ -19,21 +19,31 @@ export class SoundController {
   playWalk() {
     this.walkSound.play({ volume: 0.5, loop: true }); // Reproduce en bucle
   }
-  stopWalk() {
-    this.stopSound.play({ volume: 0.5, loop: true }); // Reproduce en bucle
+
+  stopWalkSound() {
+    this.walkSound.stop(); // Detiene el sonido de caminar
   }
+
+  stopWalk() {
+    this.stopSound.play({ volume: 0.5, loop: false }); // Reproduce el sonido de detenerse
+  }
+
   playExplosion() {
     this.explosionSound.play({ volume: EXPLOSION_VOLUME, loop: false });
   }
+
   playPowerUp() {
     this.powerUpSound.play({ volume: 0.5, loop: false });
   }
+
   playBalaBloque() {
     this.balaBloqueSound.play({ volume: 0.5, loop: false });
   }
+
   playBalaBorde() {
     this.balaBordesSound.play({ volume: 0.5, loop: false });
   }
+
   playVida() {
     this.vidaSound.play({ volume: 0.5, loop: false });
   }
