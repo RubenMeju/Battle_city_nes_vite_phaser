@@ -37,6 +37,7 @@ export class GameScene extends Phaser.Scene {
     this.load.audio('stop', 'assets/sounds/stop.wav');
     this.load.audio('walk', 'assets/sounds/walk.wav');
     this.load.audio('powerup', 'assets/sounds/coger_power_up.wav');
+    this.load.audio('bala_bloque', 'assets/sounds/bala_bloque.wav');
   }
 
   create() {
@@ -122,6 +123,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   handleBulletBlockCollision(bullet, tile) {
+    this.soundController.playBalaBloque();
     bullet.destroyBullet();
     this.mapController.getBlocks().destroyBlock(tile, bullet.direction);
   }

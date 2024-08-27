@@ -11,6 +11,7 @@ export class SoundController {
     this.stopSound = this.scene.sound.add('stop');
     this.explosionSound = this.scene.sound.add('explosion');
     this.powerUpSound = this.scene.sound.add('powerup');
+    this.balaBloqueSound = this.scene.sound.add('bala_bloque');
   }
 
   playWalk() {
@@ -24,5 +25,8 @@ export class SoundController {
   }
   playPowerUp() {
     this.powerUpSound.play({ volume: 1, loop: false });
+  }
+  playBalaBloque() {
+    this.balaBloqueSound.play({ volume: 1, loop: false });
   }
 }
