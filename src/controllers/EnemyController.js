@@ -48,7 +48,7 @@ export class EnemyController {
     this.scene.physics.add.collider(
       enemy.bullets,
       blocks.solidos,
-      this.scene.handleBulletBlockCollision,
+      this.scene.handleBulletBlockCollision.bind(this.scene),
       null,
       this.scene
     );

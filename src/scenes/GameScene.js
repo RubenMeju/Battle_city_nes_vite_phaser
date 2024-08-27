@@ -99,7 +99,7 @@ export class GameScene extends Phaser.Scene {
         this.enemyController.enemiesRemaining
     );
 
-    // Manejo de balas
+    // Manejo de balas del jugador
     this.playerController.player.bullets.getChildren().forEach((bullet) => {
       if (
         bullet.y < 0 ||
@@ -113,6 +113,23 @@ export class GameScene extends Phaser.Scene {
           bullet.destroy();
         }
       }
+    });
+
+    // Manejo de balas de los enemigos
+    this.enemyController.enemies.getChildren().forEach((enemy) => {
+      enemy.bullets.getChildren().forEach((bullet) => {
+        if (
+          bullet.y < 0 ||
+          bullet.y > this.game.config.height ||
+          bullet.x < 0 ||
+          bullet.x > this.game.config.width
+        ) {
+          // Solo destruye la bala si está activa
+          if (bullet.active) {
+            bullet.destroy();
+          }
+        }
+      });
     });
 
     //Actualizar los powerUps
