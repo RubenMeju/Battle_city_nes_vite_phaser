@@ -110,6 +110,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     ) {
       const bullet = this.bullets.get(this.x, this.y);
       if (bullet) {
+        this.scene.soundController.playBalaBloque();
         bullet.fire(this.x, this.y, this.lastDirection);
       }
     }
