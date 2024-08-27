@@ -1,6 +1,6 @@
 import { Player } from '../objects/Player.js';
 
-export class PlayerManager {
+export class PlayerController {
   constructor(scene) {
     this.scene = scene;
     this.initialPosition = { x: 220, y: 650 }; // Posición inicial
@@ -16,8 +16,8 @@ export class PlayerManager {
       0
     );
 
-    // Obtener la referencia a los bloques sólidos desde MapManager
-    const blocks = this.scene.mapManager.getBlocks();
+    // Obtener la referencia a los bloques sólidos desde MapController
+    const blocks = this.scene.mapController.getBlocks();
 
     // Colisión entre el jugador y los bloques sólidos
     if (blocks && blocks.solidos) {
@@ -34,7 +34,7 @@ export class PlayerManager {
     }
 
     // Obtener la referencia al águila
-    const eagle = this.scene.mapManager.getEagle();
+    const eagle = this.scene.mapController.getEagle();
 
     // Colisión entre el jugador y los bloques sólidos
     if (eagle && eagle.objetivo) {

@@ -7,7 +7,7 @@ import {
 import { Bloque } from '../objects/Bloque';
 import { Eagle } from '../objects/Eagle';
 
-export class MapManager {
+export class MapController {
   constructor(scene) {
     this.scene = scene;
     this.map = null;
@@ -56,12 +56,12 @@ export class MapManager {
   addCollisions() {
     // Colisión del jugador con el límite derecho
     this.scene.physics.add.collider(
-      this.scene.playerManager.player,
+      this.scene.playerController.player,
       this.rightLimit
     );
 
     // Colisión de cada enemigo con el límite derecho
-    this.scene.enemyManager.enemies.children.iterate((enemy) => {
+    this.scene.enemyController.enemies.children.iterate((enemy) => {
       this.scene.physics.add.collider(enemy, this.rightLimit);
     });
   }

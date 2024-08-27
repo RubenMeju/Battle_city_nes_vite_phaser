@@ -1,10 +1,5 @@
 import Phaser from 'phaser';
 import { createAnimations } from '../animations.js';
-import { PlayerManager } from '../managers/PlayerManager.js';
-import { EnemyManager } from '../managers/EnemyManager.js';
-import { HudManager } from '../managers/HubManager.js';
-import { SoundManager } from '../managers/SoundManager.js';
-import { MapManager } from '../managers/MapManager.js';
 
 import {
   ENEMY_SPAWN_DELAY,
@@ -12,6 +7,11 @@ import {
   TILE_SIZE,
 } from '../config.js';
 import { PowerUp } from '../objects/PowerUp.js';
+import { MapController } from '../controllers/MapController.js';
+import { PlayerController } from '../controllers/PlayerController.js';
+import { HudController } from '../controllers/HubController.js';
+import { SoundController } from '../controllers/SoundController.js';
+import { EnemyController } from '../controllers/EnemyController.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -39,28 +39,28 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.soundManager = new SoundManager(this);
+    this.soundController = new SoundController(this);
     if (!this.anims.get('up')) {
       createAnimations(this);
     }
-    this.hudManager = new HudManager(this);
-    this.mapManager = new MapManager(this); // Crea una instancia de MapManager
+    this.hudController = new HudController(this);
+    this.mapController = new MapController(this); // Crea una instancia de mapController
 
-    this.mapManager.createMap();
-    this.mapManager.createBlocks();
-    this.mapManager.createEagle();
+    this.mapController.createMap();
+    this.mapController.createBlocks();
+    this.mapController.createEagle();
 
-    this.playerManager = new PlayerManager(this);
-    this.enemyManager = new EnemyManager(this);
-    this.enemies = this.enemyManager.enemies;
+    this.playerController = new PlayerController(this);
+    this.enemyController = new EnemyController(this);
+    this.enemies = this.enemyController.enemies;
 
-    this.mapManager.createRightLimit();
+    this.mapController.createRightLimit();
 
     // PowerUp
     this.powerUp = new PowerUp(this, 220, 300, 'tiles', 194);
     // Configurar la colisión entre el jugador y el power-up
     this.physics.add.collider(
-      this.playerManager.player,
+      this.playerController.player,
       this.powerUp,
       this.handlePowerUpCollision,
       null,
@@ -81,8 +81,8 @@ export class GameScene extends Phaser.Scene {
   setupEnemyTimer() {
     this.enemyTimer = this.time.addEvent({
       delay: ENEMY_SPAWN_DELAY,
-      callback: this.enemyManager.checkNextWave,
-      callbackScope: this.enemyManager,
+      callback: this.enemyController.checkNextWave,
+      callbackScope: this.enemyController,
       loop: true,
     });
   }
@@ -90,20 +90,20 @@ export class GameScene extends Phaser.Scene {
   update(time, delta) {
     this.handleGameOver();
 
-    if (this.playerManager.player.alive) {
-      this.playerManager.update(this.cursors, this.spaceBar);
+    if (this.playerController.player.alive) {
+      this.playerController.update(this.cursors, this.spaceBar);
     }
 
-    this.enemyManager.update(time, delta);
-    this.hudManager.updateLives(this.lives);
-    this.hudManager.updateEnemies(
+    this.enemyController.update(time, delta);
+    this.hudController.updateLives(this.lives);
+    this.hudController.updateEnemies(
       this.totalEnemies -
-        this.enemyManager.enemiesCreated +
-        this.enemyManager.enemiesRemaining
+        this.enemyController.enemiesCreated +
+        this.enemyController.enemiesRemaining
     );
 
     // Manejo de balas
-    this.playerManager.player.bullets.getChildren().forEach((bullet) => {
+    this.playerController.player.bullets.getChildren().forEach((bullet) => {
       if (
         bullet.y < 0 ||
         bullet.y > this.game.config.height ||
@@ -119,19 +119,19 @@ export class GameScene extends Phaser.Scene {
   }
 
   handleGameOver() {
-    if (this.lives <= 0 || this.mapManager.eagle.eagleDestroyed) {
+    if (this.lives <= 0 || this.mapController.eagle.eagleDestroyed) {
       this.scene.start('GameOverScene');
     }
   }
 
   handleBulletBlockCollision(bullet, tile) {
     bullet.destroyBullet();
-    this.mapManager.getBlocks().destroyBlock(tile, bullet.direction);
+    this.mapController.getBlocks().destroyBlock(tile, bullet.direction);
   }
 
   handleBulletEagleCollision(bullet, tile) {
     bullet.destroyBullet();
-    this.mapManager.getEagle().destroyEagle(tile);
+    this.mapController.getEagle().destroyEagle(tile);
   }
 
   handlePowerUpCollision(player, item) {

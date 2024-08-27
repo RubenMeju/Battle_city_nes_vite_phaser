@@ -1,7 +1,7 @@
 import { Enemy } from '../objects/Enemy.js';
 import { INITIAL_ENEMIES } from '../config.js';
 
-export class EnemyManager {
+export class EnemyController {
   constructor(scene) {
     this.scene = scene;
     this.enemies = this.scene.add.group({
@@ -37,8 +37,8 @@ export class EnemyManager {
       });
 
       // Obtener la referencia a los bloques sólidos y al límite derecho
-      const blocks = this.scene.mapManager.getBlocks();
-      const rightLimit = this.scene.mapManager.getRightLimit();
+      const blocks = this.scene.mapController.getBlocks();
+      const rightLimit = this.scene.mapController.getRightLimit();
 
       // Agregar colisiones
       this.enemies.add(enemy);
@@ -57,7 +57,7 @@ export class EnemyManager {
       );
 
       this.scene.physics.add.collider(
-        this.scene.playerManager.player.bullets,
+        this.scene.playerController.player.bullets,
         this.enemies,
         this.balaJugadorImpactaEnElEnemigo,
         null,
@@ -65,7 +65,7 @@ export class EnemyManager {
       );
 
       this.scene.physics.add.collider(
-        this.scene.playerManager.player,
+        this.scene.playerController.player,
         this.enemies.children.getArray().flatMap((enemy) => enemy.bullets),
         this.balaEnemigoImpactaEnElJugador,
         null,
@@ -86,14 +86,14 @@ export class EnemyManager {
 
       enemy.setVelocity(0);
       enemy.anims.play('destruccion', true);
-      this.soundManager.playExplosion();
+      this.soundController.playExplosion();
 
       enemy.once('animationcomplete-destruccion', () => {
         // console.log('animation complete mejuuuuuuu');
         enemy.destroy();
-        this.enemyManager.enemiesRemaining--;
-        if (this.enemyManager.enemiesRemaining === 0) {
-          this.enemyManager.checkNextWave();
+        this.enemyController.enemiesRemaining--;
+        if (this.enemyController.enemiesRemaining === 0) {
+          this.enemyController.checkNextWave();
         }
       });
     }
@@ -107,7 +107,7 @@ export class EnemyManager {
       bullet.destroy();
 
       player.setVelocity(0);
-      this.soundManager.playExplosion();
+      this.soundController.playExplosion();
       player.anims.play('destruccion', true);
 
       player.once('animationcomplete-destruccion', () => {
@@ -118,7 +118,7 @@ export class EnemyManager {
 
         // Reaparecer el jugador si aún tiene vidas
         if (this.lives > 0) {
-          this.playerManager.respawnPlayer();
+          this.playerController.respawnPlayer();
         }
       });
     }

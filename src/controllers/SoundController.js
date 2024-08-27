@@ -1,6 +1,6 @@
 import { EXPLOSION_VOLUME } from '../config';
 
-export class SoundManager {
+export class SoundController {
   constructor(scene) {
     this.scene = scene;
     this.initSounds();

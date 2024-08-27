@@ -1,6 +1,6 @@
 import { Hub } from '../objects/Hub.js';
 
-export class HudManager {
+export class HudController {
   constructor(scene) {
     this.scene = scene;
     this.hub = new Hub(this.scene);
