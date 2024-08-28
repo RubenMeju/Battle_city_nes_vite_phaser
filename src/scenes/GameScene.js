@@ -136,7 +136,11 @@ export class GameScene extends Phaser.Scene {
       // Esperar un momento antes de cambiar de nivel para mostrar el mensaje de "nivel completado"
       this.time.delayedCall(1000, () => {
         const nextLevelIndex = this.currentLevel + 1;
-        this.scene.start('PreloadLevelScene', { levelIndex: nextLevelIndex });
+        if (nextLevelIndex < 2) {
+          this.scene.start('PreloadLevelScene', { levelIndex: nextLevelIndex });
+        } else {
+          this.scene.start('FinishGameScene');
+        }
       });
     }
   }
