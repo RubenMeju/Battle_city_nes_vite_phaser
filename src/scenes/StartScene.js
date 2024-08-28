@@ -31,7 +31,7 @@ export class StartScene extends Phaser.Scene {
 
     // Añadir una tecla de entrada para iniciar el juego
     this.input.keyboard.once('keydown-ENTER', () => {
-      this.scene.start('GameScene'); // Cambia a la escena principal
+      this.scene.start('PreloadLevelScene'); // Cambia a la escena principal
     });
   }
 }

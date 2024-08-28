@@ -1,11 +1,6 @@
 import Phaser from 'phaser';
 import { createAnimations } from '../animations.js';
-
-import {
-  ENEMY_SPAWN_DELAY,
-  INITIAL_ENEMY_COUNT,
-  TILE_SIZE,
-} from '../config.js';
+import { ENEMY_SPAWN_DELAY, INITIAL_ENEMY_COUNT } from '../config.js';
 import { MapController } from '../controllers/MapController.js';
 import { PlayerController } from '../controllers/PlayerController.js';
 import { HudController } from '../controllers/HubController.js';
@@ -20,38 +15,25 @@ export class GameScene extends Phaser.Scene {
     this.maxBombas = 3;
     this.totalEnemies = INITIAL_ENEMY_COUNT;
     this.isGameOver = false;
+    this.levelCompleted = false;
   }
+
   init(data) {
     this.lives = data.lives || 3;
-  }
-  preload() {
-    this.load.spritesheet('tiles', 'assets/sprites1.png', {
-      frameWidth: TILE_SIZE,
-      frameHeight: TILE_SIZE,
-    });
-
-    this.load.tilemapTiledJSON('mapa', '/assets/mapa.json');
-    this.load.image('tileSets', 'assets/sprites1.png');
-
-    // Sounds
-    this.load.audio('explosion', 'assets/sounds/explosion.wav');
-    this.load.audio('stop', 'assets/sounds/stop.wav');
-    this.load.audio('walk', 'assets/sounds/walk.wav');
-    this.load.audio('powerup', 'assets/sounds/coger_power_up.wav');
-    this.load.audio('bala_bloque', 'assets/sounds/bala_bloque.wav');
-    this.load.audio('bala_bordes', 'assets/sounds/bala_bordes.wav');
-    this.load.audio('vida', 'assets/sounds/vida.wav');
+    this.currentLevel = data.levelIndex || 0;
   }
 
   create() {
     if (!this.anims.get('up')) {
       createAnimations(this);
     }
+    this.levelCompleted = false;
+
     this.soundController = new SoundController(this);
-
     this.hudController = new HudController(this);
-    this.mapController = new MapController(this); // Crea una instancia de mapController
+    this.mapController = new MapController(this);
 
+    // Cargar y crear el mapa del nivel actual
     this.mapController.createMap();
     this.mapController.createBlocks();
     this.mapController.createEagle();
@@ -61,8 +43,6 @@ export class GameScene extends Phaser.Scene {
     this.enemies = this.enemyController.enemies;
 
     this.mapController.createRightLimit();
-
-    // PowerUp
     this.powerUpController = new PowerUpController(this);
 
     this.setupControls();
@@ -86,6 +66,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
+    if (this.levelCompleted) {
+      return; // Evitar actualizaciones adicionales si el nivel ya está completo
+    }
+
     this.handleGameOver();
 
     if (this.playerController.player.alive) {
@@ -100,15 +84,13 @@ export class GameScene extends Phaser.Scene {
         this.enemyController.enemiesRemaining
     );
 
-    // Manejo de balas del jugador
     this.playerController.player.bullets.getChildren().forEach((bullet) => {
       if (
         bullet.y < 0 ||
         bullet.y > this.game.config.height ||
         bullet.x < 0 ||
-        bullet.x > 625
+        bullet.x > this.game.config.width
       ) {
-        // Solo destruye la bala si está activa
         if (bullet.active) {
           this.soundController.playBalaBorde();
           bullet.destroy();
@@ -116,7 +98,6 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    // Manejo de balas de los enemigos
     this.enemyController.enemies.getChildren().forEach((enemy) => {
       enemy.bullets.getChildren().forEach((bullet) => {
         if (
@@ -125,7 +106,6 @@ export class GameScene extends Phaser.Scene {
           bullet.x < 0 ||
           bullet.x > this.game.config.width
         ) {
-          // Solo destruye la bala si está activa
           if (bullet.active) {
             bullet.destroy();
           }
@@ -133,8 +113,9 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    //Actualizar los powerUps
     this.powerUpController.update();
+
+    this.checkLevelCompletion();
   }
 
   handleGameOver() {
@@ -142,8 +123,21 @@ export class GameScene extends Phaser.Scene {
       console.log('Game Over: Deteniendo todos los sonidos');
       this.isGameOver = true;
       this.soundController.stopAllSounds();
-
       this.scene.start('GameOverScene');
+    }
+  }
+
+  checkLevelCompletion() {
+    if (this.enemyController.enemies.getLength() === 0) {
+      this.levelCompleted = true;
+      //  this.soundController.playPowerup(); // Reproducir sonido de nivel completado, si es necesario
+      this.playerController.player.anims.stop();
+
+      // Esperar un momento antes de cambiar de nivel para mostrar el mensaje de "nivel completado"
+      this.time.delayedCall(1000, () => {
+        const nextLevelIndex = this.currentLevel + 1;
+        this.scene.start('PreloadLevelScene', { levelIndex: nextLevelIndex });
+      });
     }
   }
 
