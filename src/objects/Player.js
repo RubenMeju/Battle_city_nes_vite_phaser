@@ -224,6 +224,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   fortifyEagle() {
     console.log('Mejorar las defensas del águila');
-    // Implementa la lógica para mejorar las defensas del águila
+    this.scene.mapController.fortifyBlocks();
   }
 }

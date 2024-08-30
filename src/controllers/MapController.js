@@ -66,6 +66,13 @@ export class MapController {
     });
   }
 
+  // Método para activar la fortificación de los bloques fuertes
+  fortifyBlocks() {
+    if (this.blocks) {
+      this.blocks.fortifyStrongBlocks();
+    }
+  }
+
   // Método para exponer los bloques a otros componentes
   getBlocks() {
     return this.blocks;

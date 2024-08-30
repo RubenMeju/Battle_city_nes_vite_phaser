@@ -2,12 +2,68 @@ export class Bloque {
   constructor(scene, mapa, tilesetKey, layerName, collisionProperty) {
     this.scene = scene;
     this.mapa = mapa;
+    this.tilesetKey = tilesetKey;
 
     // Cargar el tileset y crear la capa
     const tileset = this.mapa.addTilesetImage(tilesetKey);
     this.solidos = this.mapa.createLayer(layerName, tileset, 0, 0);
     this.solidos.setScale(this.scene.escalado);
     this.solidos.setCollisionByProperty(collisionProperty);
+    this.map = this.scene.make.tilemap({ key: 'mapa' });
+  }
+
+  fortifyStrongBlocks() {
+    const processedTiles = new Set(); // Set para rastrear tiles procesados
+
+    this.solidos.forEachTile((tile) => {
+      const tileKey = `${tile.x},${tile.y}`;
+
+      // Si ya hemos procesado este tile, no hacemos nada
+      if (processedTiles.has(tileKey)) {
+        return;
+      }
+
+      if (tile.properties.fuerte) {
+        tile.properties.destruible = false;
+
+        const worldX = tile.getCenterX();
+        const worldY = tile.getCenterY();
+
+        // Verificar las coordenadas antes de eliminar el tile
+        console.log(
+          `Fortifying tile at: (${tile.x}, ${tile.y}) with world coordinates (${worldX}, ${worldY})`
+        );
+
+        // Eliminar el tile existente
+        this.mapa.removeTileAt(tile.x, tile.y, true, true, this.solidos);
+
+        // Crear un gráfico para el cuadrado
+        const squareGraphics = this.scene.add.graphics();
+        squareGraphics.fillStyle(0xff0000, 1); // Color rojo sólido
+        squareGraphics.lineStyle(2, 0x000000, 1); // Contorno negro
+
+        // Dibujar un cuadrado centrado en la posición del tile
+        const size = 12; // Tamaño del cuadrado
+        squareGraphics.fillRect(
+          worldX - size / 2,
+          worldY - size / 2,
+          size,
+          size
+        );
+        squareGraphics.strokeRect(
+          worldX - size / 2,
+          worldY - size / 2,
+          size,
+          size
+        ); // Añadir contorno
+
+        // Asegurarse de que el cuadrado esté en la capa correcta
+        squareGraphics.setDepth(100); // Aumentar la profundidad si es necesario
+
+        // Marcar el tile como procesado
+        processedTiles.add(tileKey);
+      }
+    });
   }
 
   destroyBlock(tile, direction) {

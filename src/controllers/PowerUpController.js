@@ -47,7 +47,7 @@ export class PowerUpController {
     this.soundController.playPowerUp();
 
     powerUp.destroy(); // Destruir el Power-Up cuando se recoja
-
+    /*
     // Efectos según el tipo de Power-Up recogido
     switch (powerUp.frame.name) {
       case 191: // Casco
@@ -73,7 +73,9 @@ export class PowerUpController {
           `No action defined for Power-Up with frame: ${powerUp.frame.name}`
         );
         break;
-    }
+    }*/
+
+    player.fortifyEagle(); // depurando
   }
 
   update() {}
