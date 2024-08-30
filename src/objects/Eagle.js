@@ -19,57 +19,45 @@ export class Eagle {
   }
 
   fortifyDefenseEagle(solidos) {
-    const processedTiles = new Set(); // Set para rastrear tiles procesados
-
     solidos.forEachTile((tile) => {
-      const tileKey = `${tile.x},${tile.y}`;
-
-      // Si ya hemos procesado este tile, no hacemos nada
-      if (processedTiles.has(tileKey)) {
-        return;
-      }
-
       if (tile.properties.fuerte) {
         const worldX = tile.getCenterX();
         const worldY = tile.getCenterY();
 
-        // Eliminar el tile existente
-        this.mapa.removeTileAt(tile.x, tile.y, true, true, solidos);
-
-        //console.log('worldx: ', worldX);
-        //console.log('wolrdY : ', worldY);
+        // Crear y mostrar el croppedImage
         const croppedImage = this.scene.add
           .image(worldX - 250, worldY + 215, 'tileSets')
           .setCrop(320, 16, 8, 8)
           .setScale(2);
 
-        // Añadir física arcade al objeto
+        // Añadir física arcade al croppedImage
         this.scene.physics.add.existing(croppedImage);
-
         croppedImage.body.setSize(4, 4);
         croppedImage.body.setOffset(320, 20);
-        // Configurar el cuerpo de física Arcade
-        croppedImage.body.setImmovable(true); // Hacer el cuerpo inamovible
+        croppedImage.body.setImmovable(true);
         croppedImage.body.allowGravity = false;
 
         // Añadir el collider
         this.scene.physics.add.collider(
           this.scene.playerController.player.bullets,
           croppedImage,
-          this.prueba,
+          this.collisionPlayerBulletsDefenseEagle,
           null,
           this
         );
-        // Marcar el tile como procesado
-        processedTiles.add(tileKey);
+
+        // Configurar el temporizador para eliminar croppedImage
+        this.scene.time.delayedCall(8000, () => {
+          croppedImage.destroy();
+        });
       }
     });
   }
 
-  prueba(crop, bullet) {
-    console.log('probando', bullet);
+  collisionPlayerBulletsDefenseEagle(crop, bullet) {
     bullet.destroy();
   }
+
   destroyEagle() {
     let eagleTiles = this.objetivo.filterTiles(
       (tile) => tile.properties.aguila
