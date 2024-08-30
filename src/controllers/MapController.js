@@ -67,9 +67,9 @@ export class MapController {
   }
 
   // Método para activar la fortificación de los bloques fuertes
-  fortifyBlocks() {
-    if (this.blocks) {
-      this.blocks.fortifyStrongBlocks();
+  fortifyEagle() {
+    if (this.eagle) {
+      this.eagle.fortifyDefenseEagle(this.blocks.solidos);
     }
   }
 
