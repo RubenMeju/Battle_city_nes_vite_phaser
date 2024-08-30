@@ -36,22 +36,21 @@ export class Eagle {
         // Eliminar el tile existente
         this.mapa.removeTileAt(tile.x, tile.y, true, true, solidos);
 
-        console.log(tile);
-
         //console.log('worldx: ', worldX);
         //console.log('wolrdY : ', worldY);
         const croppedImage = this.scene.add
-          .image(worldX - 367, worldY + 331, 'tileSets')
-          .setCrop(320, 16, 4, 4)
-          .setOrigin(0.5, 0.5)
-          .setScale(this.scene.escalado);
+          .image(worldX - 250, worldY + 215, 'tileSets')
+          .setCrop(320, 16, 8, 8)
+          .setScale(2);
 
         // Añadir física arcade al objeto
-        // this.scene.physics.add.existing(croppedImage);
+        this.scene.physics.add.existing(croppedImage);
 
+        croppedImage.body.setSize(4, 4);
+        croppedImage.body.setOffset(320, 20);
         // Configurar el cuerpo de física Arcade
-        // croppedImage.body.setImmovable(true); // Hacer el cuerpo inamovible
-        //   croppedImage.body.allowGravity = false;
+        croppedImage.body.setImmovable(true); // Hacer el cuerpo inamovible
+        croppedImage.body.allowGravity = false;
 
         // Añadir el collider
         this.scene.physics.add.collider(
@@ -67,8 +66,9 @@ export class Eagle {
     });
   }
 
-  prueba() {
-    console.log('probando');
+  prueba(crop, bullet) {
+    console.log('probando', bullet);
+    bullet.destroy();
   }
   destroyEagle() {
     let eagleTiles = this.objetivo.filterTiles(
