@@ -30,48 +30,46 @@ export class Eagle {
       }
 
       if (tile.properties.fuerte) {
-        tile.properties.destruible = false;
-
         const worldX = tile.getCenterX();
         const worldY = tile.getCenterY();
-
-        // Verificar las coordenadas antes de eliminar el tile
-        console.log(
-          `Fortifying tile at: (${tile.x}, ${tile.y}) with world coordinates (${worldX}, ${worldY})`
-        );
 
         // Eliminar el tile existente
         this.mapa.removeTileAt(tile.x, tile.y, true, true, solidos);
 
-        // Crear un gráfico para el cuadrado
-        const squareGraphics = this.scene.add.graphics();
-        squareGraphics.fillStyle(0xffffff, 1); // Color blanco sólido
-        squareGraphics.lineStyle(4, 0xa9a9a9, 1); // Contorno plateado
+        console.log(tile);
 
-        // Dibujar un cuadrado centrado en la posición del tile
-        const size = 12; // Tamaño del cuadrado
-        squareGraphics.fillRect(
-          worldX - size / 2,
-          worldY - size / 2,
-          size,
-          size
+        //console.log('worldx: ', worldX);
+        //console.log('wolrdY : ', worldY);
+        const croppedImage = this.scene.add
+          .image(worldX - 367, worldY + 331, 'tileSets')
+          .setCrop(320, 16, 4, 4)
+          .setOrigin(0.5, 0.5)
+          .setScale(this.scene.escalado);
+
+        // Añadir física arcade al objeto
+        // this.scene.physics.add.existing(croppedImage);
+
+        // Configurar el cuerpo de física Arcade
+        // croppedImage.body.setImmovable(true); // Hacer el cuerpo inamovible
+        //   croppedImage.body.allowGravity = false;
+
+        // Añadir el collider
+        this.scene.physics.add.collider(
+          this.scene.playerController.player.bullets,
+          croppedImage,
+          this.prueba,
+          null,
+          this
         );
-        squareGraphics.strokeRect(
-          worldX - size / 2,
-          worldY - size / 2,
-          size,
-          size
-        ); // Añadir contorno
-
-        // Asegurarse de que el cuadrado esté en la capa correcta
-        squareGraphics.setDepth(100); // Aumentar la profundidad si es necesario
-
         // Marcar el tile como procesado
         processedTiles.add(tileKey);
       }
     });
   }
 
+  prueba() {
+    console.log('probando');
+  }
   destroyEagle() {
     let eagleTiles = this.objetivo.filterTiles(
       (tile) => tile.properties.aguila
