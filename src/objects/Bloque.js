@@ -39,8 +39,8 @@ export class Bloque {
 
         // Crear un gráfico para el cuadrado
         const squareGraphics = this.scene.add.graphics();
-        squareGraphics.fillStyle(0xff0000, 1); // Color rojo sólido
-        squareGraphics.lineStyle(2, 0x000000, 1); // Contorno negro
+        squareGraphics.fillStyle(0xffffff, 1); // Color blanco sólido
+        squareGraphics.lineStyle(4, 0xa9a9a9, 1); // Contorno plateado
 
         // Dibujar un cuadrado centrado en la posición del tile
         const size = 12; // Tamaño del cuadrado
