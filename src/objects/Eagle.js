@@ -32,8 +32,8 @@ export class Eagle {
 
         // Añadir física arcade al croppedImage
         this.scene.physics.add.existing(croppedImage);
-        croppedImage.body.setSize(4, 4);
-        croppedImage.body.setOffset(320, 20);
+        croppedImage.body.setSize(8, 6);
+        croppedImage.body.setOffset(320, 15);
         croppedImage.body.setImmovable(true);
         croppedImage.body.allowGravity = false;
 
