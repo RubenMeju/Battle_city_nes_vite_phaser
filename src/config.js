@@ -1,5 +1,5 @@
 // Constantes
-export const INITIAL_ENEMY_COUNT = 9;
+export const INITIAL_ENEMY_COUNT = 3;
 export const INITIAL_ENEMIES = 3;
 export const ENEMY_SPAWN_DELAY = 15000;
 export const TILE_SIZE = 16;
