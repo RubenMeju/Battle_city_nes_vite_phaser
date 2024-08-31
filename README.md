@@ -21,7 +21,7 @@ Puedes probar el juego en vivo [aquí](https://battle-city-nes-phaser.vercel.app
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/battle-city-phaser.git
+   git clone https://github.com/RubenMeju/Battle_city_nes_vite_phaser.git
    cd battle-city-phaser
    ```
 
