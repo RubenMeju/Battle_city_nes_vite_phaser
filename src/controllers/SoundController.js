@@ -17,7 +17,7 @@ export class SoundController {
   }
 
   playWalk() {
-    this.walkSound.play({ volume: 0.5, loop: true }); // Reproduce en bucle
+    this.walkSound.play({ volume: 0.1, loop: true }); // Reproduce en bucle
   }
 
   stopWalkSound() {
@@ -25,7 +25,7 @@ export class SoundController {
   }
 
   stopWalk() {
-    this.stopSound.play({ volume: 0.5, loop: false }); // Reproduce el sonido de detenerse
+    this.stopSound.play({ volume: 0.1, loop: false }); // Reproduce el sonido de detenerse
   }
 
   playExplosion() {
